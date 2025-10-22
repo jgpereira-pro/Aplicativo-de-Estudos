@@ -1,5 +1,6 @@
 import { Button } from "./ui/button";
 import { Home, BookOpen, User } from "lucide-react";
+import { BottomNavigation } from "./shared/BottomNavigation";
 
 interface HomeScreenProps {
   onStartDiagnostic: () => void;
@@ -7,10 +8,15 @@ interface HomeScreenProps {
   onTabChange: (tab: string) => void;
 }
 
+const navItems = [
+  { id: "home", label: "Home", icon: Home },
+  { id: "biblioteca", label: "Biblioteca de Técnicas", icon: BookOpen },
+  { id: "perfil", label: "Perfil", icon: User }
+];
+
 export function HomeScreen({ onStartDiagnostic, activeTab, onTabChange }: HomeScreenProps) {
   return (
     <div className="flex flex-col h-full">
-      {/* Main Content */}
       <div className="flex-1 flex flex-col items-center justify-center px-6">
         <h1 className="text-center mb-12">
           Encontre seu Foco Digital.
@@ -25,40 +31,11 @@ export function HomeScreen({ onStartDiagnostic, activeTab, onTabChange }: HomeSc
         </Button>
       </div>
 
-      {/* Bottom Navigation */}
-      <nav className="border-t bg-white">
-        <div className="flex justify-around items-center py-4">
-          <button
-            onClick={() => onTabChange('home')}
-            className={`flex flex-col items-center gap-1 px-6 py-2 transition-colors ${
-              activeTab === 'home' ? 'text-primary' : 'text-muted-foreground'
-            }`}
-          >
-            <Home className="w-6 h-6" />
-            <span className="text-xs">Home</span>
-          </button>
-          
-          <button
-            onClick={() => onTabChange('biblioteca')}
-            className={`flex flex-col items-center gap-1 px-6 py-2 transition-colors ${
-              activeTab === 'biblioteca' ? 'text-primary' : 'text-muted-foreground'
-            }`}
-          >
-            <BookOpen className="w-6 h-6" />
-            <span className="text-xs">Biblioteca de Técnicas</span>
-          </button>
-          
-          <button
-            onClick={() => onTabChange('perfil')}
-            className={`flex flex-col items-center gap-1 px-6 py-2 transition-colors ${
-              activeTab === 'perfil' ? 'text-primary' : 'text-muted-foreground'
-            }`}
-          >
-            <User className="w-6 h-6" />
-            <span className="text-xs">Perfil</span>
-          </button>
-        </div>
-      </nav>
+      <BottomNavigation 
+        items={navItems}
+        activeTab={activeTab}
+        onTabChange={onTabChange}
+      />
     </div>
   );
 }
