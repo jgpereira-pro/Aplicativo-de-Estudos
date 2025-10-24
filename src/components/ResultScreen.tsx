@@ -12,8 +12,11 @@ interface ResultScreenProps {
 }
 
 export function ResultScreen({ answers, onReset }: ResultScreenProps) {
-  const barrier = answers.barrier || "";
-  const recommendation = getRecommendation(barrier);
+  const recommendation = getRecommendation({
+    barrier: answers.barrier || "",
+    studyTime: answers["study-time"] || "",
+    goal: answers.goal || ""
+  });
   const Icon = recommendation.icon;
 
   return (
@@ -59,6 +62,13 @@ export function ResultScreen({ answers, onReset }: ResultScreenProps) {
               buttonIcon={<ExternalLink className="w-4 h-4 ml-2" />}
             />
           </div>
+
+          {/* Dica Extra */}
+          {recommendation.extraTip && (
+            <Card className="p-4 bg-amber-50/50 border-amber-200">
+              <p className="text-sm text-amber-900">{recommendation.extraTip}</p>
+            </Card>
+          )}
 
           <div className="pt-4">
             <Button 
