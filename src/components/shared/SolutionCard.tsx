@@ -24,15 +24,21 @@ export function SolutionCard({
   onButtonClick
 }: SolutionCardProps) {
   return (
-    <Card className="p-6">
+    <Card className="p-6 shadow-sm border-border rounded-2xl">
       <div className="flex items-center justify-between mb-3">
         <h3>{title}</h3>
-        <Badge variant="secondary">{badge}</Badge>
+        <Badge variant="secondary" className="rounded-lg px-3 py-1">
+          {badge}
+        </Badge>
       </div>
-      <p className="text-muted-foreground mb-6">{description}</p>
+      <p className="text-muted-foreground mb-6 leading-relaxed">{description}</p>
       <Button 
         variant={buttonVariant} 
-        className="w-full"
+        className={`w-full rounded-xl transition-all duration-200 ${
+          buttonVariant === "default" 
+            ? "hover:scale-103 active:scale-97 shadow-sm hover:shadow-md" 
+            : "hover:bg-accent active:scale-98"
+        }`}
         onClick={onButtonClick}
       >
         {buttonText}

@@ -6,10 +6,10 @@ interface MobileFrameProps {
 
 export function MobileFrame({ children }: MobileFrameProps) {
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-[390px] h-[844px] bg-white rounded-[3rem] shadow-2xl overflow-hidden border-8 border-slate-800 relative">
+    <div className="min-h-screen bg-gradient-to-br from-secondary/30 via-accent/20 to-white flex items-center justify-center p-4">
+      <div className="w-full max-w-[390px] h-[844px] bg-white rounded-[3rem] shadow-2xl overflow-hidden border-[10px] border-slate-800 relative">
         {/* Status Bar */}
-        <div className="h-11 bg-white flex items-center justify-between px-8 border-b">
+        <div className="h-11 bg-white flex items-center justify-between px-8 border-b border-border">
           <span className="text-sm">9:41</span>
           <div className="flex gap-1">
             <div className="w-4 h-3 border border-current rounded-sm" />
