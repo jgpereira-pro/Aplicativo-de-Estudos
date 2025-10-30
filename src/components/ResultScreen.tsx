@@ -1,24 +1,39 @@
 import { Card } from "./ui/card";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
-import { ExternalLink, Lightbulb } from "lucide-react";
+import { ExternalLink, Lightbulb, UserPlus } from "lucide-react";
 import { ScreenHeader } from "./shared/ScreenHeader";
 import { SolutionCard } from "./shared/SolutionCard";
 import { getRecommendation } from "../utils/recommendations";
 import { motion } from "motion/react";
+import { useAuth } from "../contexts/AuthContext";
+import React from "react";
 
 interface ResultScreenProps {
   answers: Record<string, string>;
   onReset: () => void;
+  onNavigateToLogin?: () => void;
 }
 
-export function ResultScreen({ answers, onReset }: ResultScreenProps) {
+export function ResultScreen({ answers, onReset, onNavigateToLogin }: ResultScreenProps) {
+  const { isAuthenticated, addDiagnosis } = useAuth();
   const recommendation = getRecommendation({
     barrier: answers.barrier || "",
     studyTime: answers["study-time"] || "",
     goal: answers.goal || ""
   });
   const Icon = recommendation.icon;
+
+  // Save diagnosis if user is authenticated
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      addDiagnosis({
+        barrier: answers.barrier || "",
+        technique: recommendation.technique,
+        answers: answers,
+      });
+    }
+  }, [isAuthenticated]);
 
   return (
     <div className="flex flex-col h-full bg-gradient-to-b from-accent/20 to-white">
@@ -111,6 +126,35 @@ export function ResultScreen({ answers, onReset }: ResultScreenProps) {
                   </div>
                   <p className="text-sm text-amber-900 leading-relaxed">{recommendation.extraTip}</p>
                 </div>
+              </Card>
+            </motion.div>
+          )}
+
+          {/* CTA for non-logged users */}
+          {!isAuthenticated && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, ease: "easeOut", delay: 0.5 }}
+            >
+              <Card className="p-6 bg-gradient-to-br from-primary/10 to-accent border-primary/20 shadow-md rounded-2xl">
+                <div className="flex items-start gap-4 mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center flex-shrink-0">
+                    <UserPlus className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-[#495057] mb-1">Gostou da recomendação?</h3>
+                    <p className="text-sm text-[#495057]/70 leading-relaxed">
+                      Crie um perfil para salvar seu progresso e ver sua evolução
+                    </p>
+                  </div>
+                </div>
+                <Button 
+                  className="w-full bg-primary hover:bg-[#1ab386] text-white rounded-xl h-12"
+                  onClick={onNavigateToLogin}
+                >
+                  Salvar Progresso
+                </Button>
               </Card>
             </motion.div>
           )}

@@ -2,18 +2,39 @@ import { Card } from "./ui/card";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { ScreenHeader } from "./shared/ScreenHeader";
-import { ExternalLink, CheckCircle2, Lightbulb } from "lucide-react";
+import { ExternalLink, CheckCircle2, Lightbulb, Heart } from "lucide-react";
 import { getTechniqueById } from "../data/techniques";
-import { categories } from "../data/techniques";
+import { categories, Technique } from "../data/techniques";
 import { motion } from "motion/react";
+import { useAuth } from "../contexts/AuthContext";
+import { toast } from "sonner";
 
 interface TechniqueDetailScreenProps {
-  techniqueId: string;
+  techniqueId?: string | null;
+  technique?: Technique;
   onBack: () => void;
 }
 
-export function TechniqueDetailScreen({ techniqueId, onBack }: TechniqueDetailScreenProps) {
-  const technique = getTechniqueById(techniqueId);
+export function TechniqueDetailScreen({ techniqueId, technique: passedTechnique, onBack }: TechniqueDetailScreenProps) {
+  const { isAuthenticated, favorites, toggleFavorite } = useAuth();
+  const technique = passedTechnique || (techniqueId ? getTechniqueById(techniqueId) : null);
+  
+  const isFavorite = technique ? favorites.includes(technique.id) : false;
+
+  const handleToggleFavorite = () => {
+    if (!isAuthenticated) {
+      toast.error("Faça login para salvar técnicas favoritas");
+      return;
+    }
+    if (technique) {
+      toggleFavorite(technique.id);
+      if (isFavorite) {
+        toast.success("Removido dos favoritos");
+      } else {
+        toast.success("Adicionado aos favoritos!");
+      }
+    }
+  };
 
   if (!technique) {
     return (
@@ -31,7 +52,26 @@ export function TechniqueDetailScreen({ techniqueId, onBack }: TechniqueDetailSc
 
   return (
     <div className="flex flex-col h-full bg-gradient-to-b from-accent/20 to-white">
-      <ScreenHeader onBack={onBack} />
+      <ScreenHeader 
+        onBack={onBack}
+        action={
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleToggleFavorite}
+            className={`rounded-xl transition-all ${
+              isFavorite 
+                ? "text-red-500 hover:text-red-600" 
+                : "text-[#495057]/40 hover:text-red-500"
+            }`}
+          >
+            <Heart 
+              className="w-5 h-5" 
+              fill={isFavorite ? "currentColor" : "none"}
+            />
+          </Button>
+        }
+      />
 
       <div className="flex-1 overflow-auto px-6 py-6 pb-4">
         <div className="max-w-md mx-auto space-y-6">

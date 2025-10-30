@@ -8,4 +8,7 @@
 
   Sobe as alterações `git add .`.
 
-  
+  Faz o commit para o git `git commit -m "escreve oque fez no commit"`.
+
+  Sobe ele para o git `git push`.
+

@@ -1,10 +1,11 @@
 import { Card } from "./ui/card";
 import { Input } from "./ui/input";
 import { BottomNavigation } from "./shared/BottomNavigation";
-import { Search, ChevronRight } from "lucide-react";
+import { Search, ChevronRight, Heart } from "lucide-react";
 import { techniques, categories, getTechniquesByCategory } from "../data/techniques";
 import { motion } from "motion/react";
 import { useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
 
 interface LibraryScreenProps {
   activeTab: string;
@@ -19,6 +20,7 @@ interface LibraryScreenProps {
 
 export function LibraryScreen({ activeTab, onTabChange, onTechniqueSelect, navItems }: LibraryScreenProps) {
   const [searchQuery, setSearchQuery] = useState("");
+  const { favorites } = useAuth();
 
   const filteredTechniques = searchQuery
     ? techniques.filter(t => 
@@ -104,8 +106,12 @@ export function LibraryScreen({ activeTab, onTabChange, onTechniqueSelect, navIt
                                 </p>
                               </div>
                               
-                              {/* Arrow */}
-                              <ChevronRight className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-1" />
+                              {/* Favorite indicator */}
+                              {favorites.includes(technique.id) ? (
+                                <Heart className="w-5 h-5 text-red-500 flex-shrink-0 mt-1" fill="currentColor" />
+                              ) : (
+                                <ChevronRight className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-1" />
+                              )}
                             </div>
                           </Card>
                         </motion.div>
