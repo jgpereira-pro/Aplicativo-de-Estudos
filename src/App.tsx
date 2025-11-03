@@ -29,13 +29,19 @@ function AppContent() {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [selectedTechniqueId, setSelectedTechniqueId] = useState<string | null>(null);
   const [selectedTechnique, setSelectedTechnique] = useState<any>(null);
+  const [previousScreen, setPreviousScreen] = useState<Screen>("home");
 
   // Redirect to study level screen if needed
   React.useEffect(() => {
-    if (isAuthenticated && needsStudyLevel) {
+    if (isAuthenticated && needsStudyLevel && currentScreen !== "study-level") {
       setCurrentScreen("study-level");
+      setActiveTab("perfil");
+    } else if (isAuthenticated && !needsStudyLevel && currentScreen === "study-level") {
+      // Navigate to profile after completing study level setup
+      setCurrentScreen("profile");
+      setActiveTab("perfil");
     }
-  }, [isAuthenticated, needsStudyLevel]);
+  }, [isAuthenticated, needsStudyLevel, currentScreen]);
 
   const handleStartDiagnostic = () => {
     setCurrentScreen("questionnaire");
@@ -65,8 +71,10 @@ function AppContent() {
     } else if (tabId === "biblioteca") {
       setCurrentScreen("library");
     } else if (tabId === "perfil") {
-      if (isAuthenticated) {
+      if (isAuthenticated && !needsStudyLevel) {
         setCurrentScreen("profile");
+      } else if (isAuthenticated && needsStudyLevel) {
+        setCurrentScreen("study-level");
       } else {
         setCurrentScreen("login");
       }
@@ -74,12 +82,14 @@ function AppContent() {
   };
 
   const handleTechniqueSelect = (techniqueId: string) => {
+    setPreviousScreen(currentScreen);
     setSelectedTechniqueId(techniqueId);
     setCurrentScreen("technique-detail");
   };
 
   const handleBackToLibrary = () => {
     setCurrentScreen("library");
+    setActiveTab("biblioteca");
     setSelectedTechniqueId(null);
   };
 
@@ -88,6 +98,7 @@ function AppContent() {
       setCurrentScreen("library");
       setActiveTab("biblioteca");
     } else if (screen === "technique-detail" && params?.technique) {
+      setPreviousScreen(currentScreen);
       setSelectedTechnique(params.technique);
       setCurrentScreen("technique-detail");
     } else if (screen === "login") {
@@ -96,12 +107,30 @@ function AppContent() {
   };
 
   const handleBackFromTechniqueDetail = () => {
-    if (currentScreen === "profile") {
-      setCurrentScreen("profile");
-    } else {
-      handleBackToLibrary();
+    // Return to the screen where the user came from
+    setCurrentScreen(previousScreen);
+    
+    // Update active tab to match the returned screen
+    if (previousScreen === "library") {
+      setActiveTab("biblioteca");
+    } else if (previousScreen === "profile") {
+      setActiveTab("perfil");
+    } else if (previousScreen === "home") {
+      setActiveTab("home");
     }
+    
     setSelectedTechnique(null);
+    setSelectedTechniqueId(null);
+  };
+
+  const handleBackFromLogin = () => {
+    setCurrentScreen("home");
+    setActiveTab("home");
+  };
+
+  const handleStudyLevelComplete = () => {
+    setCurrentScreen("profile");
+    setActiveTab("perfil");
   };
 
   return (
@@ -201,7 +230,7 @@ function AppContent() {
             transition={{ duration: 0.3, ease: "easeOut" }}
             className="h-full"
           >
-            <LoginScreen />
+            <LoginScreen onBack={handleBackFromLogin} />
           </motion.div>
         )}
 
@@ -214,7 +243,7 @@ function AppContent() {
             transition={{ duration: 0.3, ease: "easeOut" }}
             className="h-full"
           >
-            <StudyLevelScreen />
+            <StudyLevelScreen onComplete={handleStudyLevelComplete} />
           </motion.div>
         )}
 
@@ -227,7 +256,11 @@ function AppContent() {
             transition={{ duration: 0.3, ease: "easeOut" }}
             className="h-full"
           >
-            <ProfileScreen onNavigate={handleNavigate} />
+            <ProfileScreen 
+              onNavigate={handleNavigate}
+              activeTab={activeTab}
+              onTabChange={handleTabChange}
+            />
           </motion.div>
         )}
       </AnimatePresence>

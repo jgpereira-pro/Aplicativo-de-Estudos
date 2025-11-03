@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Mail, Chrome, Apple } from 'lucide-react';
+import { Mail, Chrome, Apple, ArrowLeft } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Card } from './ui/card';
 import { useAuth } from '../contexts/AuthContext';
-import { toast } from 'sonner';
+import { toast } from 'sonner@2.0.3';
 
-export const LoginScreen: React.FC = () => {
+interface LoginScreenProps {
+  onBack?: () => void;
+}
+
+export const LoginScreen: React.FC<LoginScreenProps> = ({ onBack }) => {
   const { login, register, socialLogin } = useAuth();
   const [showEmailForm, setShowEmailForm] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -84,6 +88,20 @@ export const LoginScreen: React.FC = () => {
         transition={{ duration: 0.4, ease: 'easeOut' }}
         className="w-full max-w-md"
       >
+        {/* Back Button */}
+        {onBack && (
+          <motion.button
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.1 }}
+            onClick={onBack}
+            className="flex items-center gap-2 text-[#495057]/70 hover:text-[#495057] transition-colors mb-6"
+          >
+            <ArrowLeft className="w-5 h-5" />
+            <span className="text-sm">Voltar</span>
+          </motion.button>
+        )}
+
         <div className="text-center mb-8">
           <h1 className="text-[#495057] mb-2">Acesse seu Perfil</h1>
           <p className="text-[#495057]/70">

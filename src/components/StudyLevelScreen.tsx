@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { GraduationCap, BookOpen, Lightbulb } from 'lucide-react';
 import { Button } from './ui/button';
 import { useAuth, StudyLevel } from '../contexts/AuthContext';
-import { toast } from 'sonner';
+import { toast } from 'sonner@2.0.3';
 
 const studyLevels = [
   {
@@ -26,7 +26,11 @@ const studyLevels = [
   },
 ];
 
-export const StudyLevelScreen: React.FC = () => {
+interface StudyLevelScreenProps {
+  onComplete?: () => void;
+}
+
+export const StudyLevelScreen: React.FC<StudyLevelScreenProps> = ({ onComplete }) => {
   const { updateStudyLevel } = useAuth();
   const [selectedLevel, setSelectedLevel] = useState<StudyLevel>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -41,7 +45,15 @@ export const StudyLevelScreen: React.FC = () => {
     setTimeout(() => {
       updateStudyLevel(selectedLevel);
       toast.success('Perfil configurado com sucesso!');
-    }, 300);
+      setIsSubmitting(false);
+      
+      // Navigate to profile after a brief moment
+      if (onComplete) {
+        setTimeout(() => {
+          onComplete();
+        }, 200);
+      }
+    }, 800);
   };
 
   return (
