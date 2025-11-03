@@ -121,6 +121,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setFavorites([]);
     setDiagnoses([]);
     setNeedsStudyLevel(false);
+    // Clear localStorage immediately to ensure clean logout
+    localStorage.removeItem('studyflow_user');
+    localStorage.removeItem('studyflow_favorites');
+    localStorage.removeItem('studyflow_diagnoses');
   };
 
   const updateStudyLevel = (level: StudyLevel) => {

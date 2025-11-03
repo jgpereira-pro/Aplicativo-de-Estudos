@@ -31,6 +31,14 @@ function AppContent() {
   const [selectedTechnique, setSelectedTechnique] = useState<any>(null);
   const [previousScreen, setPreviousScreen] = useState<Screen>("home");
 
+  // Handle logout - redirect to home when user logs out
+  React.useEffect(() => {
+    if (!isAuthenticated && currentScreen === "profile") {
+      setCurrentScreen("home");
+      setActiveTab("home");
+    }
+  }, [isAuthenticated, currentScreen]);
+
   // Redirect to study level screen if needed
   React.useEffect(() => {
     if (isAuthenticated && needsStudyLevel && currentScreen !== "study-level") {

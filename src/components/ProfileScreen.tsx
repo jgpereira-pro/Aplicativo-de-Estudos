@@ -91,13 +91,14 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
     return date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long' });
   };
 
-  // Safeguard: if user becomes null during render, show loading
+  // Safeguard: if user becomes null during render (e.g., during logout), show brief loading
+  // The App.tsx useEffect will quickly redirect to home
   if (!user) {
     return (
-      <div className="min-h-screen bg-[#F5EFE6] flex items-center justify-center">
+      <div className="flex flex-col h-full bg-[#F5EFE6] items-center justify-center">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-[#20C997] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-[#495057]/60">Carregando perfil...</p>
+          <p className="text-[#495057]/60">Saindo...</p>
         </div>
       </div>
     );
