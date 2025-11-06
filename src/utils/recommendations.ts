@@ -3,8 +3,10 @@ import { Timer, Sparkles, Clock, Target, LucideIcon } from "lucide-react";
 export interface Recommendation {
   diagnosis: string;
   technique: string;
+  techniqueId: string;
   techniqueDesc: string;
   tool: string;
+  toolUrl?: string;
   toolDesc: string;
   icon: LucideIcon;
   extraTip?: string;
@@ -26,8 +28,10 @@ export function getRecommendation(answers: UserAnswers): Recommendation {
     baseRecommendation = {
       diagnosis: "Sua luta é contra a Concentração.",
       technique: "Técnica Pomodoro",
+      techniqueId: "pomodoro",
       techniqueDesc: "",
       tool: "Gemini AI",
+      toolUrl: "https://gemini.google.com",
       toolDesc: "Assistente inteligente para organizar seu tempo de estudo e manter foco.",
       icon: Timer
     };
@@ -35,8 +39,10 @@ export function getRecommendation(answers: UserAnswers): Recommendation {
     baseRecommendation = {
       diagnosis: "Sua luta é contra a Procrastinação.",
       technique: "Regra dos 2 Minutos",
+      techniqueId: "two-minute",
       techniqueDesc: "",
       tool: "Gemini AI",
+      toolUrl: "https://gemini.google.com",
       toolDesc: "Divida tarefas grandes em passos pequenos e gerenciáveis.",
       icon: Sparkles
     };
@@ -44,8 +50,10 @@ export function getRecommendation(answers: UserAnswers): Recommendation {
     baseRecommendation = {
       diagnosis: "Sua luta é contra Distrações Digitais.",
       technique: "Modo Foco Profundo",
+      techniqueId: "focus-mode",
       techniqueDesc: "",
       tool: "Gemini AI",
+      toolUrl: "https://gemini.google.com",
       toolDesc: "Configure lembretes inteligentes e bloqueios de distração.",
       icon: Clock
     };
@@ -53,8 +61,10 @@ export function getRecommendation(answers: UserAnswers): Recommendation {
     baseRecommendation = {
       diagnosis: "Sua luta é com a Organização do Tempo.",
       technique: "Time Blocking",
+      techniqueId: "pomodoro",
       techniqueDesc: "",
       tool: "Gemini AI",
+      toolUrl: "https://gemini.google.com",
       toolDesc: "Planeje sua rotina de estudos com IA.",
       icon: Target
     };

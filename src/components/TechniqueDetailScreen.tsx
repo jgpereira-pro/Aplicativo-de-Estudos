@@ -7,7 +7,7 @@ import { getTechniqueById } from "../data/techniques";
 import { categories, Technique } from "../data/techniques";
 import { motion } from "motion/react";
 import { useAuth } from "../contexts/AuthContext";
-import { toast } from "sonner@2.0.3";
+import { toast } from "sonner";
 
 interface TechniqueDetailScreenProps {
   techniqueId?: string | null;
@@ -194,10 +194,13 @@ export function TechniqueDetailScreen({ techniqueId, technique: passedTechnique,
                     <Button
                       key={index}
                       variant="outline"
-                      className="w-full justify-between rounded-xl hover:bg-accent active:scale-98 transition-all duration-200"
+                      className="w-full justify-between rounded-xl hover:bg-accent active:scale-[0.98] transition-all duration-200 border-primary/30 text-primary hover:text-primary/90"
                       onClick={() => {
-                        // In a real app, this would open the URL
-                        console.log("Opening:", tool.url);
+                        toast.success(`Abrindo ${tool.name}...`, {
+                          description: "Redirecionando para a ferramenta em uma nova aba",
+                          duration: 2000,
+                        });
+                        window.open(tool.url, '_blank', 'noopener,noreferrer');
                       }}
                     >
                       <span>{tool.name}</span>

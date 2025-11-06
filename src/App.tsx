@@ -190,6 +190,11 @@ function AppContent() {
               answers={answers}
               onReset={handleReset}
               onNavigateToLogin={() => setCurrentScreen("login")}
+              onNavigateToTechnique={(techniqueId) => {
+                setPreviousScreen("result");
+                setSelectedTechniqueId(techniqueId);
+                setCurrentScreen("technique-detail");
+              }}
             />
           </motion.div>
         )}

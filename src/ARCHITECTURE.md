@@ -27,8 +27,13 @@
 
 - **Uso**: Navegação inferior com múltiplos tabs
 - **Props**: `items[]`, `activeTab`, `onTabChange`
-- **Reutilizado em**: HomeScreen
-- **Benefício**: Fácil adicionar/remover tabs sem alterar layout
+- **Reutilizado em**: HomeScreen, LibraryScreen, ProfileScreen
+- **Funcionalidades**:
+  - Hover: mudança de cor, background sutil e scale (1.05x)
+  - Active/Press: scale reduzido (0.95x) e background accent
+  - Estado ativo: background accent, barra superior, ícone duo-tone, fonte medium
+  - Glow effect no hover para tabs inativos
+- **Benefício**: Navegação consistente com feedback visual rico em todas as telas principais
 
 ### 2. **ScreenHeader**
 
@@ -54,9 +59,13 @@
 ### 5. **SolutionCard**
 
 - **Uso**: Card de técnica/ferramenta recomendada
-- **Props**: `title`, `description`, `badge`, `buttonText`, `buttonVariant`, `buttonIcon`
+- **Props**: `title`, `description`, `badge`, `buttonText`, `buttonVariant`, `buttonIcon`, `onButtonClick`
 - **Reutilizado em**: ResultScreen (2x - técnica e ferramenta)
-- **Benefício**: Consistência visual nas soluções
+- **Funcionalidades**: 
+  - Feedback visual com ring effect ao clicar
+  - Hover effects e animações de escala
+  - Callbacks customizáveis para cada botão
+- **Benefício**: Consistência visual nas soluções com interatividade completa
 
 ## 📊 Separação de Responsabilidades
 

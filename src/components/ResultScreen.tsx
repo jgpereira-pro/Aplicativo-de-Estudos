@@ -7,15 +7,17 @@ import { SolutionCard } from "./shared/SolutionCard";
 import { getRecommendation } from "../utils/recommendations";
 import { motion } from "motion/react";
 import { useAuth } from "../contexts/AuthContext";
+import { toast } from "sonner";
 import React from "react";
 
 interface ResultScreenProps {
   answers: Record<string, string>;
   onReset: () => void;
   onNavigateToLogin?: () => void;
+  onNavigateToTechnique?: (techniqueId: string) => void;
 }
 
-export function ResultScreen({ answers, onReset, onNavigateToLogin }: ResultScreenProps) {
+export function ResultScreen({ answers, onReset, onNavigateToLogin, onNavigateToTechnique }: ResultScreenProps) {
   const { isAuthenticated, addDiagnosis } = useAuth();
   const recommendation = getRecommendation({
     barrier: answers.barrier || "",
@@ -88,6 +90,15 @@ export function ResultScreen({ answers, onReset, onNavigateToLogin }: ResultScre
                 description={recommendation.techniqueDesc}
                 badge="Técnica"
                 buttonText="Ativar Técnica"
+                onButtonClick={() => {
+                  if (onNavigateToTechnique) {
+                    toast.success(`Abrindo ${recommendation.technique}...`, {
+                      description: "Veja todos os detalhes para aplicar esta técnica",
+                      duration: 2000,
+                    });
+                    onNavigateToTechnique(recommendation.techniqueId);
+                  }
+                }}
               />
             </motion.div>
 
@@ -103,6 +114,15 @@ export function ResultScreen({ answers, onReset, onNavigateToLogin }: ResultScre
                 buttonText="Acessar Ferramenta"
                 buttonVariant="outline"
                 buttonIcon={<ExternalLink className="w-4 h-4 ml-2" />}
+                onButtonClick={() => {
+                  if (recommendation.toolUrl) {
+                    toast.success(`Abrindo ${recommendation.tool}...`, {
+                      description: "Redirecionando para a ferramenta em uma nova aba",
+                      duration: 2000,
+                    });
+                    window.open(recommendation.toolUrl, '_blank', 'noopener,noreferrer');
+                  }
+                }}
               />
             </motion.div>
           </div>
