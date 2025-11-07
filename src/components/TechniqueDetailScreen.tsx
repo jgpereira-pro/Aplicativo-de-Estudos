@@ -194,13 +194,25 @@ export function TechniqueDetailScreen({ techniqueId, technique: passedTechnique,
                     <Button
                       key={index}
                       variant="outline"
-                      className="w-full justify-between rounded-xl hover:bg-accent active:scale-[0.98] transition-all duration-200 border-primary/30 text-primary hover:text-primary/90"
+                      className="w-full min-h-[48px] justify-between rounded-xl active:bg-accent active:scale-[0.98] transition-all duration-200 border-primary/30 text-primary active:text-primary/90 touch-target no-select"
                       onClick={() => {
                         toast.success(`Abrindo ${tool.name}...`, {
-                          description: "Redirecionando para a ferramenta em uma nova aba",
+                          description: "Redirecionando para a ferramenta",
                           duration: 2000,
                         });
-                        window.open(tool.url, '_blank', 'noopener,noreferrer');
+                        // Android: Fallback para window.open bloqueado
+                        try {
+                          const newWindow = window.open(tool.url, '_blank', 'noopener,noreferrer');
+                          if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+                            window.location.href = tool.url;
+                          }
+                        } catch (e) {
+                          window.location.href = tool.url;
+                        }
+                      }}
+                      style={{
+                        transform: 'translateZ(0)',
+                        WebkitTransform: 'translateZ(0)',
                       }}
                     >
                       <span>{tool.name}</span>

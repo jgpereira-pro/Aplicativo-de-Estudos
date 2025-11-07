@@ -1,6 +1,17 @@
 import { LucideIcon } from "lucide-react";
 import { useState } from "react";
 
+/**
+ * BottomNavigation - Barra de navegação inferior com feedback visual rico
+ * 
+ * Efeitos visuais implementados:
+ * - Touch/Press: escala 0.95x, background accent, ring effect com animação ripple
+ * - Estado ativo: background accent/30, barra superior primary, ícone duo-tone, fonte medium
+ * - Transições suaves de 200ms com ease-out para todos os estados
+ * - Otimizado para dispositivos touch (Android/iOS)
+ * - Áreas de toque adequadas (44x44px mínimo)
+ */
+
 interface NavItem {
   id: string;
   label: string;
@@ -19,6 +30,7 @@ export function BottomNavigation({ items, activeTab, onTabChange }: BottomNaviga
   const handlePress = (itemId: string) => {
     setPressedTab(itemId);
     onTabChange(itemId);
+    // Reset pressed state after animation
     setTimeout(() => setPressedTab(null), 200);
   };
 
@@ -35,20 +47,28 @@ export function BottomNavigation({ items, activeTab, onTabChange }: BottomNaviga
               key={item.id}
               onClick={() => handlePress(item.id)}
               className={`
-                relative flex flex-col items-center gap-1 px-6 py-2 rounded-2xl
+                relative flex flex-col items-center gap-1 px-6 py-3 rounded-2xl
+                min-w-[64px] min-h-[56px]
                 transition-all duration-200 ease-out
+                touch-target no-select
                 /* Base colors: primary when active, muted when inactive */
                 ${isActive ? 'text-primary' : 'text-muted-foreground'}
-                /* Hover effects: color change, subtle background, slight scale up */
-                ${!isActive && 'hover:text-primary/70 hover:bg-accent/50 hover:shadow-sm'}
-                hover:scale-105
-                /* Active/Press effects: scale down, accent background */
+                /* Touch/Press effects: scale down, accent background - funciona em Android */
                 active:scale-95 active:bg-accent
                 /* Active tab background */
                 ${isActive ? 'bg-accent/30 shadow-inner' : ''}
-                /* Pressed effect */
+                /* Pressed effect - visual feedback para Android */
                 ${isPressed && !isActive ? 'ring-2 ring-primary/20 ring-offset-2' : ''}
+                /* Desktop hover (não afeta Android) */
+                @media (hover: hover) {
+                  ${!isActive && 'hover:text-primary/70 hover:bg-accent/50 hover:shadow-sm hover:scale-105'}
+                }
               `}
+              style={{
+                /* Android: Forçar GPU acceleration para animações suaves */
+                transform: 'translateZ(0)',
+                WebkitTransform: 'translateZ(0)',
+              }}
             >
               {/* Active indicator - top bar with animation */}
               {isActive && (
@@ -78,14 +98,16 @@ export function BottomNavigation({ items, activeTab, onTabChange }: BottomNaviga
                 {item.label}
               </span>
 
-              {/* Hover glow effect for inactive tabs */}
-              {!isActive && (
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-primary/8 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
-              )}
-
-              {/* Press ripple effect */}
+              {/* Press ripple effect - otimizado para Android */}
               {isPressed && (
-                <div className="absolute inset-0 rounded-2xl bg-primary/10 animate-in fade-in zoom-in-95 duration-200" />
+                <div 
+                  className="absolute inset-0 rounded-2xl bg-primary/10 animate-in fade-in zoom-in-95 duration-200"
+                  style={{
+                    /* Android: GPU acceleration */
+                    transform: 'translateZ(0)',
+                    willChange: 'transform, opacity'
+                  }}
+                />
               )}
             </button>
           );

@@ -117,10 +117,21 @@ export function ResultScreen({ answers, onReset, onNavigateToLogin, onNavigateTo
                 onButtonClick={() => {
                   if (recommendation.toolUrl) {
                     toast.success(`Abrindo ${recommendation.tool}...`, {
-                      description: "Redirecionando para a ferramenta em uma nova aba",
+                      description: "Redirecionando para a ferramenta",
                       duration: 2000,
                     });
-                    window.open(recommendation.toolUrl, '_blank', 'noopener,noreferrer');
+                    // Android: Usar window.location para maior compatibilidade
+                    // Em Android, window.open pode ser bloqueado
+                    try {
+                      const newWindow = window.open(recommendation.toolUrl, '_blank', 'noopener,noreferrer');
+                      // Fallback se window.open for bloqueado
+                      if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+                        window.location.href = recommendation.toolUrl;
+                      }
+                    } catch (e) {
+                      // Fallback para Android
+                      window.location.href = recommendation.toolUrl;
+                    }
                   }
                 }}
               />

@@ -82,8 +82,12 @@ export function LibraryScreen({ activeTab, onTabChange, onTechniqueSelect, navIt
                           }}
                         >
                           <Card
-                            className="p-4 hover:shadow-md transition-all duration-200 cursor-pointer border-border rounded-xl hover:border-primary/30 active:scale-98"
+                            className="p-4 transition-all duration-200 cursor-pointer border-border rounded-xl active:border-primary/30 active:scale-[0.98] active:shadow-md touch-target no-select"
                             onClick={() => onTechniqueSelect(technique.id)}
+                            style={{
+                              transform: 'translateZ(0)',
+                              WebkitTransform: 'translateZ(0)',
+                            }}
                           >
                             <div className="flex items-start gap-4">
                               {/* Duo-tone Icon */}

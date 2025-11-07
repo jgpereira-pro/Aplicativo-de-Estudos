@@ -34,7 +34,7 @@ export function SolutionCard({
   };
 
   return (
-    <Card className="p-6 shadow-sm border-border rounded-2xl hover:shadow-md transition-shadow duration-200">
+    <Card className="p-6 shadow-sm border-border rounded-2xl transition-shadow duration-200">
       <div className="flex items-center justify-between mb-3">
         <h3>{title}</h3>
         <Badge variant="secondary" className="rounded-lg px-3 py-1">
@@ -44,13 +44,22 @@ export function SolutionCard({
       <p className="text-muted-foreground mb-6 leading-relaxed">{description}</p>
       <Button 
         variant={buttonVariant} 
-        className={`w-full rounded-xl transition-all duration-200 ${
-          buttonVariant === "default" 
-            ? "hover:scale-[1.02] active:scale-[0.98] shadow-sm hover:shadow-md bg-primary hover:bg-[#1ab386]" 
-            : "hover:bg-accent active:scale-[0.98] border-primary text-primary hover:text-primary/90"
-        } ${isClicked ? 'ring-2 ring-primary ring-offset-2' : ''}`}
+        className={`
+          w-full rounded-xl transition-all duration-200 min-h-[44px]
+          ${buttonVariant === "default" 
+            ? "active:scale-[0.98] shadow-sm bg-primary active:bg-[#1ab386]" 
+            : "active:scale-[0.98] border-primary text-primary active:bg-accent"
+          } 
+          ${isClicked ? 'ring-2 ring-primary ring-offset-2' : ''}
+          touch-target no-select
+        `}
         onClick={handleClick}
         disabled={!onButtonClick}
+        style={{
+          /* Android: GPU acceleration */
+          transform: 'translateZ(0)',
+          WebkitTransform: 'translateZ(0)',
+        }}
       >
         {buttonText}
         {buttonIcon}

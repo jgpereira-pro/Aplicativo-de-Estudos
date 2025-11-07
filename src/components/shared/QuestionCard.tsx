@@ -27,12 +27,20 @@ export function QuestionCard({
             <Button
               key={index}
               variant={isSelected ? "default" : "outline"}
-              className={`w-full h-auto py-4 px-6 text-left justify-between rounded-xl transition-all duration-200 ${
-                isSelected 
-                  ? 'shadow-sm scale-102' 
-                  : 'hover:bg-accent hover:border-primary/20 active:scale-98'
-              }`}
+              className={`
+                w-full h-auto min-h-[56px] py-4 px-6 text-left justify-between rounded-xl 
+                transition-all duration-200 touch-target no-select
+                ${isSelected 
+                  ? 'shadow-sm' 
+                  : 'active:bg-accent active:border-primary/20 active:scale-[0.98]'
+                }
+              `}
               onClick={() => onSelectOption(option)}
+              style={{
+                /* Android: GPU acceleration */
+                transform: isSelected ? 'scale(1.02) translateZ(0)' : 'translateZ(0)',
+                WebkitTransform: isSelected ? 'scale(1.02) translateZ(0)' : 'translateZ(0)',
+              }}
             >
               <span className="flex-1">{option}</span>
               

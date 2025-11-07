@@ -40,38 +40,64 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
   const [needsStudyLevel, setNeedsStudyLevel] = useState(false);
 
-  // Load from localStorage on mount
+  // Load from localStorage on mount - Android compatible
   useEffect(() => {
-    const storedUser = localStorage.getItem('studyflow_user');
-    const storedFavorites = localStorage.getItem('studyflow_favorites');
-    const storedDiagnoses = localStorage.getItem('studyflow_diagnoses');
+    try {
+      // Android: Verificar se localStorage está disponível
+      if (typeof window !== 'undefined' && window.localStorage) {
+        const storedUser = localStorage.getItem('studyflow_user');
+        const storedFavorites = localStorage.getItem('studyflow_favorites');
+        const storedDiagnoses = localStorage.getItem('studyflow_diagnoses');
 
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    if (storedFavorites) {
-      setFavorites(JSON.parse(storedFavorites));
-    }
-    if (storedDiagnoses) {
-      setDiagnoses(JSON.parse(storedDiagnoses));
+        if (storedUser) {
+          setUser(JSON.parse(storedUser));
+        }
+        if (storedFavorites) {
+          setFavorites(JSON.parse(storedFavorites));
+        }
+        if (storedDiagnoses) {
+          setDiagnoses(JSON.parse(storedDiagnoses));
+        }
+      }
+    } catch (error) {
+      // Android: Falha silenciosa se localStorage não estiver disponível
+      console.warn('LocalStorage não disponível:', error);
     }
   }, []);
 
-  // Save to localStorage when data changes
+  // Save to localStorage when data changes - Android compatible
   useEffect(() => {
-    if (user) {
-      localStorage.setItem('studyflow_user', JSON.stringify(user));
-    } else {
-      localStorage.removeItem('studyflow_user');
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        if (user) {
+          localStorage.setItem('studyflow_user', JSON.stringify(user));
+        } else {
+          localStorage.removeItem('studyflow_user');
+        }
+      }
+    } catch (error) {
+      console.warn('Erro ao salvar no localStorage:', error);
     }
   }, [user]);
 
   useEffect(() => {
-    localStorage.setItem('studyflow_favorites', JSON.stringify(favorites));
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        localStorage.setItem('studyflow_favorites', JSON.stringify(favorites));
+      }
+    } catch (error) {
+      console.warn('Erro ao salvar favoritos:', error);
+    }
   }, [favorites]);
 
   useEffect(() => {
-    localStorage.setItem('studyflow_diagnoses', JSON.stringify(diagnoses));
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        localStorage.setItem('studyflow_diagnoses', JSON.stringify(diagnoses));
+      }
+    } catch (error) {
+      console.warn('Erro ao salvar diagnósticos:', error);
+    }
   }, [diagnoses]);
 
   const login = async (email: string, password: string) => {
@@ -121,10 +147,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setFavorites([]);
     setDiagnoses([]);
     setNeedsStudyLevel(false);
-    // Clear localStorage immediately to ensure clean logout
-    localStorage.removeItem('studyflow_user');
-    localStorage.removeItem('studyflow_favorites');
-    localStorage.removeItem('studyflow_diagnoses');
+    // Android: Clear localStorage com try/catch
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        localStorage.removeItem('studyflow_user');
+        localStorage.removeItem('studyflow_favorites');
+        localStorage.removeItem('studyflow_diagnoses');
+      }
+    } catch (error) {
+      console.warn('Erro ao limpar localStorage no logout:', error);
+    }
   };
 
   const updateStudyLevel = (level: StudyLevel) => {

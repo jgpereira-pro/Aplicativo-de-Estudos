@@ -19,7 +19,11 @@ export function ScreenHeader({ title, onBack, children, variant = "default", act
           {onBack && (
             <button 
               onClick={onBack} 
-              className="text-muted-foreground hover:text-primary transition-colors duration-200 mb-4 p-1 rounded-lg hover:bg-accent"
+              className="text-muted-foreground active:text-primary transition-colors duration-200 mb-4 p-2 min-w-[44px] min-h-[44px] rounded-lg active:bg-accent touch-target no-select"
+              style={{
+                transform: 'translateZ(0)',
+                WebkitTransform: 'translateZ(0)',
+              }}
             >
               {/* Duo-tone back icon */}
               <div className="relative">

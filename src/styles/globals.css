@@ -139,10 +139,37 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    /* Android: Desabilitar highlight padrão de toque */
+    -webkit-tap-highlight-color: transparent;
+    /* Android: Otimizar scroll */
+    -webkit-overflow-scrolling: touch;
   }
 
   body {
     @apply bg-background text-foreground;
+    /* Android: Prevenir bounce/overscroll */
+    overscroll-behavior: none;
+    /* Android: Melhorar performance de scroll */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Android: Estilos específicos para botões e elementos interativos */
+  button, a, [role="button"] {
+    /* Desabilitar seleção de texto */
+    -webkit-user-select: none;
+    user-select: none;
+    /* Desabilitar callout em long press */
+    -webkit-touch-callout: none;
+    /* Garantir cursor pointer */
+    cursor: pointer;
+    /* Prevenir comportamento de tap delay */
+    touch-action: manipulation;
+  }
+
+  /* Android: Melhorar performance de inputs */
+  input, textarea, select {
+    /* Prevenir zoom automático em iOS/Android */
+    font-size: max(16px, 1rem);
   }
 }
 
@@ -259,5 +286,63 @@ body {
 
   .active\:scale-98:active {
     transform: scale(0.98);
+  }
+
+  /* Android: Otimizações de performance */
+  .gpu-accelerated {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  .smooth-scroll {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  /* Android: Áreas de toque mínimas (44x44px) */
+  .touch-target {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Android: Prevenir seleção de texto em elementos interativos */
+  .no-select {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  /* Android: Ripple effect customizado */
+  @keyframes ripple {
+    0% {
+      transform: scale(0);
+      opacity: 0.5;
+    }
+    100% {
+      transform: scale(2);
+      opacity: 0;
+    }
+  }
+
+  .ripple-effect {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ripple-effect::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background: currentColor;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+
+  .ripple-effect:active::after {
+    animation: ripple 0.6s ease-out;
   }
 }

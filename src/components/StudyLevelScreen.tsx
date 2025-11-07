@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { motion } from "motion/react";
-import { GraduationCap, BookOpen, Lightbulb } from "lucide-react";
-import { Button } from "./ui/button";
-import { useAuth, StudyLevel } from "../contexts/AuthContext";
-import { toast } from "sonner";
+import React, { useState } from 'react';
+import { motion } from 'motion/react';
+import { GraduationCap, BookOpen, Lightbulb } from 'lucide-react';
+import { Button } from './ui/button';
+import { useAuth, StudyLevel } from '../contexts/AuthContext';
+import { toast } from 'sonner';
 
 const studyLevels = [
   {

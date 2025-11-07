@@ -59,7 +59,12 @@ export function HomeScreen({ onStartDiagnostic, activeTab, onTabChange }: HomeSc
         <Button 
           onClick={onStartDiagnostic}
           size="lg"
-          className="w-full max-w-xs h-14 rounded-xl transition-all duration-200 hover:scale-[1.03] active:scale-[0.97] shadow-sm hover:shadow-md bg-primary hover:bg-[#1ab386]"
+          className="w-full max-w-xs min-h-[56px] rounded-xl transition-all duration-200 active:scale-[0.97] shadow-sm bg-primary active:bg-[#1ab386] touch-target no-select"
+          style={{
+            /* Android: GPU acceleration para animações suaves */
+            transform: 'translateZ(0)',
+            WebkitTransform: 'translateZ(0)',
+          }}
         >
           Iniciar Diagnóstico Rápido
         </Button>
