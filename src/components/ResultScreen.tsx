@@ -7,7 +7,7 @@ import { SolutionCard } from "./shared/SolutionCard";
 import { getRecommendation } from "../utils/recommendations";
 import { motion } from "motion/react";
 import { useAuth } from "../contexts/AuthContext";
-import { toast } from "sonner";
+import { toast } from "sonner@2.0.3";
 import React from "react";
 
 interface ResultScreenProps {

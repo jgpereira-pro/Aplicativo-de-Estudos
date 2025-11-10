@@ -7,7 +7,7 @@ import { Label } from './ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Card } from './ui/card';
 import { useAuth } from '../contexts/AuthContext';
-import { toast } from 'sonner';
+import { toast } from 'sonner@2.0.3';
 
 interface LoginScreenProps {
   onBack?: () => void;

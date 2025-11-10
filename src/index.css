@@ -80,7 +80,6 @@
     --color-black: #000;
     --color-white: #fff;
     --spacing: .25rem;
-    --container-xs: 20rem;
     --container-sm: 24rem;
     --container-md: 28rem;
     --container-lg: 32rem;
@@ -94,6 +93,8 @@
     --text-lg--line-height: calc(1.75 / 1.125);
     --text-xl: 1.25rem;
     --text-2xl: 1.5rem;
+    --text-6xl: 3.75rem;
+    --text-6xl--line-height: 1;
     --font-weight-normal: 400;
     --font-weight-medium: 500;
     --font-weight-semibold: 600;
@@ -536,6 +537,14 @@
     margin-top: calc(var(--spacing) * 4);
   }
 
+  .mr-2 {
+    margin-right: calc(var(--spacing) * 2);
+  }
+
+  .mb-0\.5 {
+    margin-bottom: calc(var(--spacing) * .5);
+  }
+
   .mb-1 {
     margin-bottom: calc(var(--spacing) * 1);
   }
@@ -693,6 +702,18 @@
     min-height: 56px;
   }
 
+  .min-h-\[60px\] {
+    min-height: 60px;
+  }
+
+  .min-h-\[72px\] {
+    min-height: 72px;
+  }
+
+  .min-h-full {
+    min-height: 100%;
+  }
+
   .min-h-screen {
     min-height: 100vh;
   }
@@ -765,10 +786,6 @@
     max-width: var(--container-sm);
   }
 
-  .max-w-xs {
-    max-width: var(--container-xs);
-  }
-
   .min-w-0 {
     min-width: calc(var(--spacing) * 0);
   }
@@ -816,6 +833,10 @@
     scale: var(--tw-scale-x) var(--tw-scale-y);
   }
 
+  .-rotate-90 {
+    rotate: -90deg;
+  }
+
   .transform {
     transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
   }
@@ -826,6 +847,10 @@
 
   .animate-spin {
     animation: var(--animate-spin);
+  }
+
+  .cursor-not-allowed {
+    cursor: not-allowed;
   }
 
   .cursor-pointer {
@@ -842,6 +867,10 @@
 
   .grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .grid-rows-\[auto_auto\] {
@@ -952,6 +981,10 @@
     overflow: hidden;
   }
 
+  .overflow-y-auto {
+    overflow-y: auto;
+  }
+
   .rounded-2xl {
     border-radius: var(--radius-2xl);
   }
@@ -983,6 +1016,11 @@
   .border {
     border-style: var(--tw-border-style);
     border-width: 1px;
+  }
+
+  .border-0 {
+    border-style: var(--tw-border-style);
+    border-width: 0;
   }
 
   .border-2 {
@@ -1035,6 +1073,10 @@
 
   .border-current {
     border-color: currentColor;
+  }
+
+  .border-destructive {
+    border-color: var(--destructive);
   }
 
   .border-gray-200 {
@@ -1181,6 +1223,10 @@
     }
   }
 
+  .bg-transparent {
+    background-color: #0000;
+  }
+
   .bg-white {
     background-color: var(--color-white);
   }
@@ -1234,6 +1280,17 @@
   @supports (color: color-mix(in lab, red, red)) {
     .from-accent\/30 {
       --tw-gradient-from: color-mix(in oklab, var(--accent) 30%, transparent);
+    }
+  }
+
+  .from-accent\/50 {
+    --tw-gradient-from: var(--accent);
+    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .from-accent\/50 {
+      --tw-gradient-from: color-mix(in oklab, var(--accent) 50%, transparent);
     }
   }
 
@@ -1456,6 +1513,11 @@
     text-align: left;
   }
 
+  .text-6xl {
+    font-size: var(--text-6xl);
+    line-height: var(--tw-leading, var(--text-6xl--line-height));
+  }
+
   .text-base {
     font-size: var(--text-base);
     line-height: var(--tw-leading, var(--text-base--line-height));
@@ -1545,6 +1607,10 @@
     color: var(--card-foreground);
   }
 
+  .text-destructive {
+    color: var(--destructive);
+  }
+
   .text-foreground {
     color: var(--foreground);
   }
@@ -1589,6 +1655,14 @@
 
   .opacity-20 {
     opacity: .2;
+  }
+
+  .opacity-50 {
+    opacity: .5;
+  }
+
+  .opacity-80 {
+    opacity: .8;
   }
 
   .shadow-2xl {
@@ -1722,6 +1796,14 @@
 
   .fade-in {
     --tw-enter-opacity: 0;
+  }
+
+  .paused {
+    animation-play-state: paused;
+  }
+
+  .running {
+    animation-play-state: running;
   }
 
   .slide-in-from-top-2 {
@@ -2090,6 +2172,16 @@
 
   .active\:bg-accent:active {
     background-color: var(--accent);
+  }
+
+  .active\:bg-destructive\/10:active {
+    background-color: var(--destructive);
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .active\:bg-destructive\/10:active {
+      background-color: color-mix(in oklab, var(--destructive) 10%, transparent);
+    }
   }
 
   .active\:text-primary:active {

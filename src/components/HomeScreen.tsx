@@ -1,5 +1,6 @@
 import { Button } from "./ui/button";
-import { Home, BookOpen, User } from "lucide-react";
+import { Card } from "./ui/card";
+import { Home, BookOpen, User, Clock, ArrowRight } from "lucide-react";
 import { BottomNavigation } from "./shared/BottomNavigation";
 
 interface HomeScreenProps {
@@ -10,6 +11,7 @@ interface HomeScreenProps {
 
 const navItems = [
   { id: "home", label: "Home", icon: Home },
+  { id: "foco", label: "Foco", icon: Clock },
   { id: "biblioteca", label: "Biblioteca", icon: BookOpen },
   { id: "perfil", label: "Perfil", icon: User }
 ];
@@ -17,7 +19,8 @@ const navItems = [
 export function HomeScreen({ onStartDiagnostic, activeTab, onTabChange }: HomeScreenProps) {
   return (
     <div className="flex flex-col h-full bg-gradient-to-b from-accent/30 to-white">
-      <div className="flex-1 flex flex-col items-center justify-center px-6 py-12">
+      <div className="flex-1 overflow-y-auto smooth-scroll">
+        <div className="flex flex-col items-center justify-center px-6 py-12 min-h-full">
         {/* Abstract Illustration */}
         <div className="mb-12 relative w-64 h-64">
           <svg viewBox="0 0 200 200" className="w-full h-full">
@@ -56,18 +59,44 @@ export function HomeScreen({ onStartDiagnostic, activeTab, onTabChange }: HomeSc
           Descubra técnicas personalizadas para melhorar sua concentração e produtividade nos estudos.
         </p>
         
-        <Button 
-          onClick={onStartDiagnostic}
-          size="lg"
-          className="w-full max-w-xs min-h-[56px] rounded-xl transition-all duration-200 active:scale-[0.97] shadow-sm bg-primary active:bg-[#1ab386] touch-target no-select"
-          style={{
-            /* Android: GPU acceleration para animações suaves */
-            transform: 'translateZ(0)',
-            WebkitTransform: 'translateZ(0)',
-          }}
-        >
-          Iniciar Diagnóstico Rápido
-        </Button>
+        <div className="w-full max-w-sm space-y-4">
+          <Button 
+            onClick={onStartDiagnostic}
+            size="lg"
+            className="w-full min-h-[56px] rounded-xl transition-all duration-200 active:scale-[0.97] shadow-sm bg-primary active:bg-[#1ab386] touch-target no-select"
+            style={{
+              /* Android: GPU acceleration para animações suaves */
+              transform: 'translateZ(0)',
+              WebkitTransform: 'translateZ(0)',
+            }}
+          >
+            Iniciar Diagnóstico Rápido
+          </Button>
+
+          {/* Quick Access Card - Focus Session */}
+          <Card 
+            className="p-4 rounded-2xl border-primary/20 bg-gradient-to-br from-accent/50 to-white cursor-pointer transition-all duration-200 active:scale-[0.98] active:shadow-md touch-target no-select"
+            onClick={() => onTabChange("foco")}
+            style={{
+              transform: 'translateZ(0)',
+              WebkitTransform: 'translateZ(0)',
+            }}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                  <Clock className="w-6 h-6 text-primary" strokeWidth={2.5} />
+                </div>
+                <div>
+                  <h4 className="text-sm mb-0.5">Sessão de Foco</h4>
+                  <p className="text-xs text-muted-foreground">Timer Pomodoro integrado</p>
+                </div>
+              </div>
+              <ArrowRight className="w-5 h-5 text-primary" />
+            </div>
+          </Card>
+        </div>
+        </div>
       </div>
 
       <BottomNavigation 

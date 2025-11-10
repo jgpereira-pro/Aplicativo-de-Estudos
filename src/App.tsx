@@ -1,6 +1,6 @@
 import { useState } from "react";
 import React from "react";
-import { Home, BookOpen, User } from "lucide-react";
+import { Home, BookOpen, User, Clock } from "lucide-react";
 import { HomeScreen } from "./components/HomeScreen";
 import { QuestionnaireScreen } from "./components/QuestionnaireScreen";
 import { ResultScreen } from "./components/ResultScreen";
@@ -9,15 +9,17 @@ import { TechniqueDetailScreen } from "./components/TechniqueDetailScreen";
 import { LoginScreen } from "./components/LoginScreen";
 import { StudyLevelScreen } from "./components/StudyLevelScreen";
 import { ProfileScreen } from "./components/ProfileScreen";
+import { FocusSessionScreen } from "./components/FocusSessionScreen";
 import { MobileFrame } from "./components/shared/MobileFrame";
 import { motion, AnimatePresence } from "motion/react";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { Toaster } from "./components/ui/sonner";
 
-type Screen = "home" | "questionnaire" | "result" | "library" | "technique-detail" | "login" | "study-level" | "profile";
+type Screen = "home" | "questionnaire" | "result" | "library" | "technique-detail" | "login" | "study-level" | "profile" | "focus";
 
 const navItems = [
   { id: "home", label: "Home", icon: Home },
+  { id: "foco", label: "Foco", icon: Clock },
   { id: "biblioteca", label: "Biblioteca", icon: BookOpen },
   { id: "perfil", label: "Perfil", icon: User }
 ];
@@ -76,6 +78,8 @@ function AppContent() {
     
     if (tabId === "home") {
       setCurrentScreen("home");
+    } else if (tabId === "foco") {
+      setCurrentScreen("focus");
     } else if (tabId === "biblioteca") {
       setCurrentScreen("library");
     } else if (tabId === "perfil") {
@@ -273,6 +277,23 @@ function AppContent() {
               onNavigate={handleNavigate}
               activeTab={activeTab}
               onTabChange={handleTabChange}
+            />
+          </motion.div>
+        )}
+
+        {currentScreen === "focus" && (
+          <motion.div
+            key="focus"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="h-full"
+          >
+            <FocusSessionScreen 
+              activeTab={activeTab}
+              onTabChange={handleTabChange}
+              navItems={navItems}
             />
           </motion.div>
         )}
