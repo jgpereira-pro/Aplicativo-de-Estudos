@@ -123,7 +123,7 @@ export function TechniqueDetailScreen({ techniqueId, technique: passedTechnique,
             </Card>
           </motion.div>
 
-          {/* How to Apply Section */}
+          {/* How to Apply Sectio */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
