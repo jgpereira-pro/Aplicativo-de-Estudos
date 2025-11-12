@@ -1,6 +1,6 @@
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
-import { Home, BookOpen, User, Clock, ArrowRight } from "lucide-react";
+import { Home, BookOpen, User, Clock, Calendar, Layers, ArrowRight } from "lucide-react";
 import { BottomNavigation } from "./shared/BottomNavigation";
 
 interface HomeScreenProps {
@@ -11,7 +11,8 @@ interface HomeScreenProps {
 
 const navItems = [
   { id: "home", label: "Home", icon: Home },
-  { id: "foco", label: "Foco", icon: Clock },
+  { id: "decks", label: "Decks", icon: Layers },
+  { id: "planner", label: "Planner", icon: Calendar },
   { id: "biblioteca", label: "Biblioteca", icon: BookOpen },
   { id: "perfil", label: "Perfil", icon: User }
 ];
@@ -73,28 +74,46 @@ export function HomeScreen({ onStartDiagnostic, activeTab, onTabChange }: HomeSc
             Iniciar Diagnóstico Rápido
           </Button>
 
-          {/* Quick Access Card - Focus Session */}
-          <Card 
-            className="p-4 rounded-2xl border-primary/20 bg-gradient-to-br from-accent/50 to-white cursor-pointer transition-all duration-200 active:scale-[0.98] active:shadow-md touch-target no-select"
-            onClick={() => onTabChange("foco")}
-            style={{
-              transform: 'translateZ(0)',
-              WebkitTransform: 'translateZ(0)',
-            }}
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
+          {/* Quick Access Cards */}
+          <div className="grid grid-cols-2 gap-3">
+            <Card 
+              className="p-4 rounded-2xl border-primary/20 bg-gradient-to-br from-accent/50 to-white cursor-pointer transition-all duration-200 active:scale-[0.98] active:shadow-md touch-target no-select"
+              onClick={() => onTabChange("decks")}
+              style={{
+                transform: 'translateZ(0)',
+                WebkitTransform: 'translateZ(0)',
+              }}
+            >
+              <div className="flex flex-col items-center text-center gap-2">
                 <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <Clock className="w-6 h-6 text-primary" strokeWidth={2.5} />
+                  <Layers className="w-6 h-6 text-primary" strokeWidth={2.5} />
                 </div>
                 <div>
-                  <h4 className="text-sm mb-0.5">Sessão de Foco</h4>
-                  <p className="text-xs text-muted-foreground">Timer Pomodoro integrado</p>
+                  <h4 className="text-sm mb-0.5">Flashcards</h4>
+                  <p className="text-xs text-muted-foreground">Decks rápidos</p>
                 </div>
               </div>
-              <ArrowRight className="w-5 h-5 text-primary" />
-            </div>
-          </Card>
+            </Card>
+
+            <Card 
+              className="p-4 rounded-2xl border-primary/20 bg-gradient-to-br from-accent/50 to-white cursor-pointer transition-all duration-200 active:scale-[0.98] active:shadow-md touch-target no-select"
+              onClick={() => onTabChange("planner")}
+              style={{
+                transform: 'translateZ(0)',
+                WebkitTransform: 'translateZ(0)',
+              }}
+            >
+              <div className="flex flex-col items-center text-center gap-2">
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                  <Calendar className="w-6 h-6 text-primary" strokeWidth={2.5} />
+                </div>
+                <div>
+                  <h4 className="text-sm mb-0.5">Planejador</h4>
+                  <p className="text-xs text-muted-foreground">Calendário</p>
+                </div>
+              </div>
+            </Card>
+          </div>
         </div>
         </div>
       </div>

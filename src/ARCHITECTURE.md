@@ -16,8 +16,13 @@
 │   ├── QuestionnaireScreen.tsx      # Tela de questionário
 │   ├── ResultScreen.tsx             # Tela de resultados
 │   ├── FocusSessionScreen.tsx       # Tela de sessão de foco (Timer Pomodoro)
+│   ├── StudyPlannerScreen.tsx       # Planejador semanal de estudos
+│   ├── DecksListScreen.tsx          # Lista de decks de flashcards
+│   ├── DeckReviewScreen.tsx         # Revisão de flashcards (modo estudo)
 ├── data/
-│   └── questions.ts                 # Dados das perguntas (separados da lógica)
+│   ├── questions.ts                 # Dados das perguntas (separados da lógica)
+│   ├── techniques.ts                # Biblioteca de técnicas de estudo
+│   └── flashcards.ts                # Decks padrão de flashcards
 └── utils/
     └── recommendations.ts           # Lógica de recomendação (separada da UI)
 ```
@@ -121,12 +126,15 @@ ProfileScreen (autenticado)    Back to Library/Profile
 
 ### Telas Principais
 
-1. **HomeScreen**: Ponto de entrada, diagnóstico rápido e acesso à sessão de foco
-2. **FocusSessionScreen**: Timer Pomodoro/Deep Work com 3 modos (25m, 50m, personalizado)
-3. **LibraryScreen**: Catálogo de 9 técnicas organizadas em 4 categorias
-4. **ProfileScreen**: Técnicas favoritas, histórico de diagnósticos, sugestões personalizadas
-5. **QuestionnaireScreen**: Fluxo de diagnóstico com 3 perguntas
-6. **ResultScreen**: Recomendações personalizadas baseadas nas respostas
+1. **HomeScreen**: Ponto de entrada com diagnóstico rápido e acesso aos Decks e Planejador
+2. **DecksListScreen**: Lista de decks de flashcards com busca e criação de novos decks
+3. **DeckReviewScreen**: Modo de revisão com flashcards e sistema de avaliação (Difícil/Bom/Fácil)
+4. **StudyPlannerScreen**: Calendário semanal com blocos de estudo personalizáveis
+5. **FocusSessionScreen**: Timer Pomodoro/Deep Work com 3 modos (25m, 50m, personalizado)
+6. **LibraryScreen**: Catálogo de 9 técnicas organizadas em 4 categorias
+7. **ProfileScreen**: Técnicas favoritas, histórico de diagnósticos, sugestões personalizadas
+8. **QuestionnaireScreen**: Fluxo de diagnóstico com 3 perguntas
+9. **ResultScreen**: Recomendações personalizadas baseadas nas respostas
 
 ## 📝 Convenções de Nomenclatura
 
@@ -137,6 +145,45 @@ ProfileScreen (autenticado)    Back to Library/Profile
 - **Tipos/Interfaces**: PascalCase (`NavItem`, `Recommendation`)
 
 ## 🎯 Funcionalidades Implementadas
+
+### Decks Rápidos (DecksListScreen + DeckReviewScreen)
+- **Lista de Decks**: Layout de cards similar à Biblioteca
+  - 4 decks padrão pré-carregados: Inglês, Física, Química, Geografia
+  - Busca por nome ou categoria
+  - Badge com contagem de cards por deck
+  - Stats cards: Total de decks e total de cards
+  - Filtro de categorias com badges
+- **Criação de Decks**: FAB + Bottom Sheet Drawer
+  - Campos: Nome, Descrição, Categoria
+  - Persistência em localStorage
+- **Modo de Revisão**: Flashcards com sistema de spaced repetition
+  - Card centralizado (fundo branco, rounded-2xl)
+  - Flip animation ao tocar no card
+  - Progress bar no topo
+  - 3 botões de avaliação com ícones sutis:
+    - Difícil (ThumbsDown, outline neutro)
+    - Bom (Minus, outline primary/30, texto primary)
+    - Fácil (ThumbsUp, outline primary/30, texto primary)
+  - Tela de conclusão com estatísticas e opção de revisar novamente
+  - Vibração tátil ao avaliar (Android)
+- **Design System Consistente**: Usa apenas Card, Button, Badge e cores da paleta
+
+### Planejador de Estudos (StudyPlannerScreen)
+- **Grid Semanal**: Calendário de 7 dias (Dom-Sáb) com horários 6h-20h
+- **Blocos de Estudo**: Cards arredondados com opacidades variadas do Verde Água (#20C997)
+  - 3 intensidades visuais: bg-primary/20, bg-primary/30, bg-primary/15
+  - Border primary/30 para definição sutil
+  - Altura dinâmica baseada na duração (1-4 horas)
+- **Navegação de Semanas**: Setas para navegar entre semanas (passado/futuro)
+- **Indicador de Hoje**: Background primary/10 no dia atual
+- **FAB (Floating Action Button)**: Botão circular Verde Água fixo para adicionar blocos
+- **Bottom Sheet Drawer**: Modal deslizante para adicionar/editar blocos
+  - Campos: Matéria, Descrição, Dia da Semana, Horário, Duração
+  - Seletor visual de dias (7 botões em grid)
+  - Opções de edição e remoção
+- **Persistência**: LocalStorage para salvar blocos automaticamente
+- **Stats Card**: Resumo de horas totais da semana
+- **Paleta Restrita**: Apenas Verde Água, Areia e Accent (sem cores extras)
 
 ### Sessão de Foco (FocusSessionScreen)
 - **Timer Circular**: Anel de progresso SVG com animação suave
@@ -164,8 +211,29 @@ ProfileScreen (autenticado)    Back to Library/Profile
 ## 📦 Estatísticas do Projeto
 
 - **Componentes Mestres**: 5 arquivos compartilhados
-- **Telas Principais**: 8 componentes (Home, Focus, Library, Profile, etc.)
-- **Dados/Utils**: 4 arquivos de suporte
+- **Telas Principais**: 11 componentes (Home, Decks, DeckReview, Planner, Focus, Library, Profile, etc.)
+- **Dados/Utils**: 5 arquivos de suporte (questions, techniques, flashcards, recommendations)
 - **Contextos**: 1 (AuthContext para autenticação)
 - **Total de Técnicas**: 9 técnicas em 4 categorias
-- **Bottom Navigation**: 4 tabs (Home, Foco, Biblioteca, Perfil)
+- **Decks Padrão**: 4 decks com 22 flashcards no total
+- **Bottom Navigation**: 5 tabs (Home, Decks, Planner, Biblioteca, Perfil)
+
+## 🎨 Paleta de Cores (Calm Natural)
+
+**Cores Principais:**
+- **Verde Água (Primary)**: #20C997 - Botões, ícones ativos, destaques
+- **Areia (Background)**: #F5EFE6 - Fundo principal, superfícies
+- **Accent**: #E6FAF4 - Fundos secundários, estados hover/active
+
+**Variações de Opacidade (Planejador):**
+- `bg-primary/10`: Indicador de dia atual
+- `bg-primary/15`: Blocos de estudo (intensidade 3)
+- `bg-primary/20`: Blocos de estudo (intensidade 1)
+- `bg-primary/30`: Blocos de estudo (intensidade 2), borders
+- `border-primary/30`: Bordas de blocos de estudo
+
+**Princípio de Design:**
+- Evita "arco-íris" de cores
+- Usa opacidades para criar hierarquia visual
+- Mantém consistência em todo o app
+- Cores sutis e calmantes para foco e produtividade
