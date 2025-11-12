@@ -7,7 +7,7 @@ import { getTechniqueById } from "../data/techniques";
 import { categories, Technique } from "../data/techniques";
 import { motion } from "motion/react";
 import { useAuth } from "../contexts/AuthContext";
-import { toast } from "sonner";
+import { toast } from "sonner@2.0.3";
 
 interface TechniqueDetailScreenProps {
   techniqueId?: string | null;
