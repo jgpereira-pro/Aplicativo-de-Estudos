@@ -1,6 +1,6 @@
 import { useState } from "react";
 import React from "react";
-import { Home, BookOpen, User, Clock, Calendar, Layers } from "lucide-react";
+import { Home, BookOpen, User, Clock, Calendar, Layers, Network } from "lucide-react";
 import { HomeScreen } from "./components/HomeScreen";
 import { QuestionnaireScreen } from "./components/QuestionnaireScreen";
 import { ResultScreen } from "./components/ResultScreen";
@@ -13,17 +13,19 @@ import { FocusSessionScreen } from "./components/FocusSessionScreen";
 import { StudyPlannerScreen } from "./components/StudyPlannerScreen";
 import { DecksListScreen } from "./components/DecksListScreen";
 import { DeckReviewScreen } from "./components/DeckReviewScreen";
+import { ConceptBoardScreen } from "./components/ConceptBoardScreen";
 import { MobileFrame } from "./components/shared/MobileFrame";
 import { motion, AnimatePresence } from "motion/react";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { Toaster } from "./components/ui/sonner";
 
-type Screen = "home" | "questionnaire" | "result" | "library" | "technique-detail" | "login" | "study-level" | "profile" | "focus" | "planner" | "decks" | "deck-review";
+type Screen = "home" | "questionnaire" | "result" | "library" | "technique-detail" | "login" | "study-level" | "profile" | "focus" | "planner" | "decks" | "deck-review" | "concept-board";
 
 const navItems = [
   { id: "home", label: "Home", icon: Home },
   { id: "decks", label: "Decks", icon: Layers },
   { id: "planner", label: "Planner", icon: Calendar },
+  { id: "foco", label: "Foco", icon: Clock },
   { id: "biblioteca", label: "Biblioteca", icon: BookOpen },
   { id: "perfil", label: "Perfil", icon: User }
 ];
@@ -181,6 +183,7 @@ function AppContent() {
               onStartDiagnostic={handleStartDiagnostic}
               activeTab={activeTab}
               onTabChange={handleTabChange}
+              onNavigateToConceptBoard={() => setCurrentScreen("concept-board")}
             />
           </motion.div>
         )}
@@ -365,6 +368,23 @@ function AppContent() {
             <DeckReviewScreen 
               deckId={selectedDeckId}
               onBack={handleBackFromDeckReview}
+            />
+          </motion.div>
+        )}
+
+        {currentScreen === "concept-board" && (
+          <motion.div
+            key="concept-board"
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 100 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="h-full"
+          >
+            <ConceptBoardScreen 
+              activeTab={activeTab}
+              onTabChange={handleTabChange}
+              navItems={navItems}
             />
           </motion.div>
         )}

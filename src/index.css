@@ -65,6 +65,7 @@
   :root, :host {
     --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --color-red-50: oklch(.971 .013 17.38);
     --color-red-500: oklch(.637 .237 25.331);
     --color-red-600: oklch(.577 .245 27.325);
     --color-amber-50: oklch(.987 .022 95.277);
@@ -460,6 +461,10 @@
     container: card-header / inline-size;
   }
 
+  .pointer-events-none {
+    pointer-events: none;
+  }
+
   .absolute {
     position: absolute;
   }
@@ -500,6 +505,10 @@
     top: calc(var(--spacing) * 4);
   }
 
+  .top-20 {
+    top: calc(var(--spacing) * 20);
+  }
+
   .top-\[50\%\] {
     top: 50%;
   }
@@ -510,6 +519,10 @@
 
   .right-6 {
     right: calc(var(--spacing) * 6);
+  }
+
+  .bottom-20 {
+    bottom: calc(var(--spacing) * 20);
   }
 
   .bottom-24 {
@@ -536,6 +549,14 @@
     z-index: 20;
   }
 
+  .z-30 {
+    z-index: 30;
+  }
+
+  .z-40 {
+    z-index: 40;
+  }
+
   .z-50 {
     z-index: 50;
   }
@@ -550,6 +571,74 @@
 
   .row-start-1 {
     grid-row-start: 1;
+  }
+
+  .\!container {
+    width: 100% !important;
+  }
+
+  @media (width >= 40rem) {
+    .\!container {
+      max-width: 40rem !important;
+    }
+  }
+
+  @media (width >= 48rem) {
+    .\!container {
+      max-width: 48rem !important;
+    }
+  }
+
+  @media (width >= 64rem) {
+    .\!container {
+      max-width: 64rem !important;
+    }
+  }
+
+  @media (width >= 80rem) {
+    .\!container {
+      max-width: 80rem !important;
+    }
+  }
+
+  @media (width >= 96rem) {
+    .\!container {
+      max-width: 96rem !important;
+    }
+  }
+
+  .container {
+    width: 100%;
+  }
+
+  @media (width >= 40rem) {
+    .container {
+      max-width: 40rem;
+    }
+  }
+
+  @media (width >= 48rem) {
+    .container {
+      max-width: 48rem;
+    }
+  }
+
+  @media (width >= 64rem) {
+    .container {
+      max-width: 64rem;
+    }
+  }
+
+  @media (width >= 80rem) {
+    .container {
+      max-width: 80rem;
+    }
+  }
+
+  @media (width >= 96rem) {
+    .container {
+      max-width: 96rem;
+    }
   }
 
   .m-1 {
@@ -590,6 +679,10 @@
 
   .mt-auto {
     margin-top: auto;
+  }
+
+  .mr-1 {
+    margin-right: calc(var(--spacing) * 1);
   }
 
   .mr-2 {
@@ -850,6 +943,10 @@
 
   .w-\[100px\] {
     width: 100px;
+  }
+
+  .w-\[110px\] {
+    width: 110px;
   }
 
   .w-fit {
@@ -1168,6 +1265,10 @@
     border-color: #20c997;
   }
 
+  .border-\[\#E6FAF4\] {
+    border-color: #e6faf4;
+  }
+
   .border-amber-200\/60 {
     border-color: color-mix(in srgb, oklch(.924 .12 95.746) 60%, transparent);
   }
@@ -1362,6 +1463,10 @@
     .bg-primary\/30 {
       background-color: color-mix(in oklab, var(--primary) 30%, transparent);
     }
+  }
+
+  .bg-red-500 {
+    background-color: var(--color-red-500);
   }
 
   .bg-secondary {
@@ -1895,6 +2000,10 @@
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
 
+  .ring-\[\#20C997\] {
+    --tw-ring-color: #20c997;
+  }
+
   .ring-primary {
     --tw-ring-color: var(--primary);
   }
@@ -2177,6 +2286,18 @@
       .hover\:bg-primary\/90:hover {
         background-color: color-mix(in oklab, var(--primary) 90%, transparent);
       }
+    }
+  }
+
+  @media (hover: hover) {
+    .hover\:bg-red-50:hover {
+      background-color: var(--color-red-50);
+    }
+  }
+
+  @media (hover: hover) {
+    .hover\:bg-red-600:hover {
+      background-color: var(--color-red-600);
     }
   }
 

@@ -10,6 +10,8 @@ import {
   Home,
   BookOpen,
   User,
+  Clock,
+  Layers,
 } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
@@ -39,6 +41,9 @@ interface ProfileScreenProps {
 
 const navItems = [
   { id: 'home', label: 'Home', icon: Home },
+  { id: 'decks', label: 'Decks', icon: Layers },
+  { id: 'planner', label: 'Planner', icon: Calendar },
+  { id: 'foco', label: 'Foco', icon: Clock },
   { id: 'biblioteca', label: 'Biblioteca', icon: BookOpen },
   { id: 'perfil', label: 'Perfil', icon: User }
 ];
