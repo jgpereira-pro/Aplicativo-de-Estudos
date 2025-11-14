@@ -1,6 +1,5 @@
 import { Button } from "./ui/button";
-import { Card } from "./ui/card";
-import { Home, BookOpen, User, Grid3x3, ArrowRight, Network } from "lucide-react";
+import { Home, BookOpen, User } from "lucide-react";
 import { BottomNavigation } from "./shared/BottomNavigation";
 
 interface HomeScreenProps {
@@ -12,6 +11,9 @@ interface HomeScreenProps {
 
 const navItems = [
   { id: "home", label: "Home", icon: Home },
+  { id: "decks", label: "Decks", icon: Layers },
+  { id: "planner", label: "Planner", icon: Calendar },
+  { id: "foco", label: "Foco", icon: Clock },
   { id: "biblioteca", label: "Biblioteca", icon: BookOpen },
   { id: "tools", label: "Ferramentas", icon: Grid3x3 },
   { id: "perfil", label: "Perfil", icon: User }
@@ -60,21 +62,18 @@ export function HomeScreen({ onStartDiagnostic, activeTab, onTabChange, onNaviga
           Descubra técnicas personalizadas para melhorar sua concentração e produtividade nos estudos.
         </p>
         
-        <div className="w-full max-w-sm space-y-4">
-          <Button 
-            onClick={onStartDiagnostic}
-            size="lg"
-            className="w-full min-h-[56px] rounded-xl transition-all duration-200 active:scale-[0.97] shadow-sm bg-primary active:bg-[#1ab386] touch-target no-select"
-            style={{
-              /* Android: GPU acceleration para animações suaves */
-              transform: 'translateZ(0)',
-              WebkitTransform: 'translateZ(0)',
-            }}
-          >
-            Iniciar Diagnóstico Rápido
-          </Button>
-        </div>
-        </div>
+        <Button 
+          onClick={onStartDiagnostic}
+          size="lg"
+          className="w-full max-w-xs min-h-[56px] rounded-xl transition-all duration-200 active:scale-[0.97] shadow-sm bg-primary active:bg-[#1ab386] touch-target no-select"
+          style={{
+            /* Android: GPU acceleration para animações suaves */
+            transform: 'translateZ(0)',
+            WebkitTransform: 'translateZ(0)',
+          }}
+        >
+          Iniciar Diagnóstico Rápido
+        </Button>
       </div>
 
       <BottomNavigation 

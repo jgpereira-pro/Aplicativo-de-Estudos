@@ -1,6 +1,6 @@
 import { useState } from "react";
 import React from "react";
-import { Home, BookOpen, User, Grid3x3 } from "lucide-react";
+import { Home, BookOpen, User } from "lucide-react";
 import { HomeScreen } from "./components/HomeScreen";
 import { QuestionnaireScreen } from "./components/QuestionnaireScreen";
 import { ResultScreen } from "./components/ResultScreen";
@@ -23,6 +23,9 @@ type Screen = "home" | "questionnaire" | "result" | "library" | "technique-detai
 
 const navItems = [
   { id: "home", label: "Home", icon: Home },
+  { id: "decks", label: "Decks", icon: Layers },
+  { id: "planner", label: "Planner", icon: Calendar },
+  { id: "foco", label: "Foco", icon: Clock },
   { id: "biblioteca", label: "Biblioteca", icon: BookOpen },
   { id: "tools", label: "Ferramentas", icon: Grid3x3 },
   { id: "perfil", label: "Perfil", icon: User }
