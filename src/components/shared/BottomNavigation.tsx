@@ -1,15 +1,18 @@
-import { LucideIcon } from "lucide-react";
+import { LucideIcon, Grid3x3, Clock, Layers, Calendar } from "lucide-react";
 import { useState } from "react";
+import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
+import { Card } from "../ui/card";
+import { motion, AnimatePresence } from "motion/react";
 
 /**
- * BottomNavigation - Barra de navegação inferior com feedback visual rico
+ * BottomNavigation - Barra de navegação inferior simplificada (4 itens)
  * 
- * Efeitos visuais implementados:
- * - Touch/Press: escala 0.95x, background accent, ring effect com animação ripple
- * - Estado ativo: background accent/30, barra superior primary, ícone duo-tone, fonte medium
- * - Transições suaves de 200ms com ease-out para todos os estados
- * - Otimizado para dispositivos touch (Android/iOS)
- * - Áreas de toque adequadas (44x44px mínimo)
+ * Redesign simplificado:
+ * - 4 itens: Home, Biblioteca, Ferramentas (menu), Perfil
+ * - Estado ativo: apenas cor (ícone duo-tone + texto em primary)
+ * - Estado inativo: ícone outline + texto muted
+ * - Sem pílula de fundo, sem linha superior
+ * - Menu de ferramentas central para Foco, Decks e Planner
  */
 
 interface NavItem {
@@ -25,67 +28,191 @@ interface BottomNavigationProps {
 }
 
 export function BottomNavigation({ items, activeTab, onTabChange }: BottomNavigationProps) {
-  const [pressedTab, setPressedTab] = useState<string | null>(null);
+  const [toolsMenuOpen, setToolsMenuOpen] = useState(false);
 
-  const handlePress = (itemId: string) => {
-    setPressedTab(itemId);
-    onTabChange(itemId);
-    // Reset pressed state after animation
-    setTimeout(() => setPressedTab(null), 200);
+  const tools = [
+    { 
+      id: "foco", 
+      label: "Sessão de Foco", 
+      icon: Clock,
+      description: "Timer Pomodoro e Deep Work",
+      gradient: "from-[#E6FAF4] to-white"
+    },
+    { 
+      id: "decks", 
+      label: "Decks", 
+      icon: Layers,
+      description: "Flashcards e revisão",
+      gradient: "from-[#E6FAF4] to-white"
+    },
+    { 
+      id: "planner", 
+      label: "Planner", 
+      icon: Calendar,
+      description: "Planejador semanal",
+      gradient: "from-[#E6FAF4] to-white"
+    },
+  ];
+
+  const handleToolSelect = (toolId: string) => {
+    setToolsMenuOpen(false);
+    onTabChange(toolId);
   };
 
   return (
     <nav className="border-t border-border bg-white">
-      <div className="flex justify-around items-center py-4">
+      <div className="flex justify-around items-center py-2 px-2">
         {items.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
-          const isPressed = pressedTab === item.id;
           
+          // Special handling for tools menu item
+          if (item.id === "tools") {
+            return (
+              <Sheet key={item.id} open={toolsMenuOpen} onOpenChange={setToolsMenuOpen}>
+                <SheetTrigger asChild>
+                  <button
+                    className={`
+                      relative flex flex-col items-center gap-1 px-4 py-2 rounded-xl
+                      min-w-[64px] min-h-[44px]
+                      transition-all duration-200 ease-out
+                      touch-target no-select
+                      ${isActive ? 'text-primary' : 'text-[#495057]/60'}
+                      active:scale-95
+                    `}
+                    style={{
+                      transform: 'translateZ(0)',
+                      WebkitTransform: 'translateZ(0)',
+                    }}
+                  >
+                    {/* Icon with duo-tone effect when active */}
+                    <div className="relative">
+                      <Icon 
+                        className="w-6 h-6 transition-all duration-200" 
+                        strokeWidth={isActive ? 2.5 : 2} 
+                      />
+                      {isActive && (
+                        <Icon 
+                          className="w-6 h-6 absolute inset-0 opacity-20" 
+                          fill="currentColor"
+                          strokeWidth={0}
+                        />
+                      )}
+                    </div>
+                    
+                    <span className={`text-xs transition-all duration-200 ${
+                      isActive ? 'font-medium' : 'font-normal'
+                    }`}>
+                      {item.label}
+                    </span>
+                  </button>
+                </SheetTrigger>
+                <SheetContent 
+                  side="bottom" 
+                  className="bg-[#F5EFE6] rounded-t-3xl border-t-2 border-[#E6FAF4]"
+                >
+                  <div className="pb-6 pt-2">
+                    {/* Header */}
+                    <div className="text-center mb-6">
+                      <div className="w-12 h-1 bg-[#495057]/20 rounded-full mx-auto mb-4" />
+                      <h3 className="text-[#495057] mb-1">Ferramentas de Estudo</h3>
+                      <p className="text-sm text-[#495057]/60">Escolha uma ferramenta</p>
+                    </div>
+
+                    {/* Tools Grid */}
+                    <div className="space-y-3 max-w-md mx-auto">
+                      {tools.map((tool, index) => {
+                        const ToolIcon = tool.icon;
+                        const isToolActive = activeTab === tool.id;
+                        
+                        return (
+                          <motion.button
+                            key={tool.id}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.1 }}
+                            onClick={() => handleToolSelect(tool.id)}
+                            className="w-full"
+                          >
+                            <Card 
+                              className={`
+                                p-4 rounded-2xl transition-all duration-200
+                                bg-gradient-to-br ${tool.gradient}
+                                active:scale-[0.98] touch-target no-select
+                                ${isToolActive ? 'border-2 border-primary shadow-md' : 'border-border shadow-sm'}
+                              `}
+                              style={{
+                                transform: 'translateZ(0)',
+                                WebkitTransform: 'translateZ(0)',
+                              }}
+                            >
+                              <div className="flex items-center gap-4">
+                                {/* Icon */}
+                                <div className={`
+                                  w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0
+                                  ${isToolActive ? 'bg-primary' : 'bg-primary/10'}
+                                `}>
+                                  <ToolIcon 
+                                    className={`w-7 h-7 ${isToolActive ? 'text-white' : 'text-primary'}`}
+                                    strokeWidth={2.5}
+                                  />
+                                </div>
+                                
+                                {/* Content */}
+                                <div className="flex-1 text-left">
+                                  <h4 className={`text-[#495057] mb-0.5 ${
+                                    isToolActive ? 'text-primary' : ''
+                                  }`}>
+                                    {tool.label}
+                                  </h4>
+                                  <p className="text-xs text-[#495057]/60">
+                                    {tool.description}
+                                  </p>
+                                </div>
+
+                                {/* Active indicator */}
+                                {isToolActive && (
+                                  <div className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
+                                )}
+                              </div>
+                            </Card>
+                          </motion.button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </SheetContent>
+              </Sheet>
+            );
+          }
+
+          // Regular nav items
           return (
             <button
               key={item.id}
-              onClick={() => handlePress(item.id)}
+              onClick={() => onTabChange(item.id)}
               className={`
-                relative flex flex-col items-center gap-1 px-6 py-3 rounded-2xl
-                min-w-[64px] min-h-[56px]
+                relative flex flex-col items-center gap-1 px-4 py-2 rounded-xl
+                min-w-[64px] min-h-[44px]
                 transition-all duration-200 ease-out
                 touch-target no-select
-                /* Base colors: primary when active, muted when inactive */
-                ${isActive ? 'text-primary' : 'text-muted-foreground'}
-                /* Touch/Press effects: scale down, accent background - funciona em Android */
-                active:scale-95 active:bg-accent
-                /* Active tab background */
-                ${isActive ? 'bg-accent/30 shadow-inner' : ''}
-                /* Pressed effect - visual feedback para Android */
-                ${isPressed && !isActive ? 'ring-2 ring-primary/20 ring-offset-2' : ''}
-                /* Desktop hover (não afeta Android) */
-                @media (hover: hover) {
-                  ${!isActive && 'hover:text-primary/70 hover:bg-accent/50 hover:shadow-sm hover:scale-105'}
-                }
+                ${isActive ? 'text-primary' : 'text-[#495057]/60'}
+                active:scale-95
               `}
               style={{
-                /* Android: Forçar GPU acceleration para animações suaves */
                 transform: 'translateZ(0)',
                 WebkitTransform: 'translateZ(0)',
               }}
             >
-              {/* Active indicator - top bar with animation */}
-              {isActive && (
-                <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-1 rounded-full bg-primary shadow-sm animate-in fade-in slide-in-from-top-2 duration-300" />
-              )}
-              
-              {/* Duo-tone icon effect with enhanced styling */}
+              {/* Icon with duo-tone effect when active */}
               <div className="relative">
                 <Icon 
-                  className={`w-6 h-6 transition-all duration-200 ${
-                    isActive ? 'drop-shadow-sm' : ''
-                  } ${isPressed && !isActive ? 'scale-90' : ''}`} 
+                  className="w-6 h-6 transition-all duration-200" 
                   strokeWidth={isActive ? 2.5 : 2} 
                 />
                 {isActive && (
                   <Icon 
-                    className="w-6 h-6 absolute inset-0 opacity-20 animate-in fade-in duration-300" 
+                    className="w-6 h-6 absolute inset-0 opacity-20" 
                     fill="currentColor"
                     strokeWidth={0}
                   />
@@ -97,18 +224,6 @@ export function BottomNavigation({ items, activeTab, onTabChange }: BottomNaviga
               }`}>
                 {item.label}
               </span>
-
-              {/* Press ripple effect - otimizado para Android */}
-              {isPressed && (
-                <div 
-                  className="absolute inset-0 rounded-2xl bg-primary/10 animate-in fade-in zoom-in-95 duration-200"
-                  style={{
-                    /* Android: GPU acceleration */
-                    transform: 'translateZ(0)',
-                    willChange: 'transform, opacity'
-                  }}
-                />
-              )}
             </button>
           );
         })}

@@ -2,20 +2,21 @@ import { Card } from "./ui/card";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { ScreenHeader } from "./shared/ScreenHeader";
-import { ExternalLink, CheckCircle2, Lightbulb, Heart } from "lucide-react";
+import { Clock, Layers, Calendar, CheckCircle2, Lightbulb, Heart } from "lucide-react";
 import { getTechniqueById } from "../data/techniques";
 import { categories, Technique } from "../data/techniques";
 import { motion } from "motion/react";
 import { useAuth } from "../contexts/AuthContext";
-import { toast } from "sonner";
+import { toast } from "sonner@2.0.3";
 
 interface TechniqueDetailScreenProps {
   techniqueId?: string | null;
   technique?: Technique;
   onBack: () => void;
+  onNavigateToTool?: (tool: string) => void;
 }
 
-export function TechniqueDetailScreen({ techniqueId, technique: passedTechnique, onBack }: TechniqueDetailScreenProps) {
+export function TechniqueDetailScreen({ techniqueId, technique: passedTechnique, onBack, onNavigateToTool }: TechniqueDetailScreenProps) {
   const { isAuthenticated, favorites, toggleFavorite } = useAuth();
   const technique = passedTechnique || (techniqueId ? getTechniqueById(techniqueId) : null);
   
@@ -190,35 +191,44 @@ export function TechniqueDetailScreen({ techniqueId, technique: passedTechnique,
               <Card className="p-6 shadow-sm border-border rounded-2xl">
                 <h3 className="mb-4">Ferramentas Relacionadas</h3>
                 <div className="space-y-2">
-                  {technique.relatedTools.map((tool, index) => (
-                    <Button
-                      key={index}
-                      variant="outline"
-                      className="w-full min-h-[48px] justify-between rounded-xl active:bg-accent active:scale-[0.98] transition-all duration-200 border-primary/30 text-primary active:text-primary/90 touch-target no-select"
-                      onClick={() => {
-                        toast.success(`Abrindo ${tool.name}...`, {
-                          description: "Redirecionando para a ferramenta",
-                          duration: 2000,
-                        });
-                        // Android: Fallback para window.open bloqueado
-                        try {
-                          const newWindow = window.open(tool.url, '_blank', 'noopener,noreferrer');
-                          if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
-                            window.location.href = tool.url;
+                  {technique.relatedTools.map((tool, index) => {
+                    // Mapear ferramentas para ações internas
+                    const getToolAction = (toolName: string) => {
+                      const nameLower = toolName.toLowerCase();
+                      if (nameLower.includes('timer') || nameLower.includes('pomodoro')) {
+                        return { label: 'Abrir Timer', icon: Clock, action: 'foco' };
+                      } else if (nameLower.includes('calendar') || nameLower.includes('agenda')) {
+                        return { label: 'Abrir Planejador', icon: Calendar, action: 'planner' };
+                      } else if (nameLower.includes('flashcard') || nameLower.includes('deck')) {
+                        return { label: 'Abrir Flashcards', icon: Layers, action: 'decks' };
+                      } else {
+                        return { label: `Abrir ${toolName}`, icon: Clock, action: 'foco' };
+                      }
+                    };
+
+                    const toolAction = getToolAction(tool.name);
+                    const ToolIcon = toolAction.icon;
+
+                    return (
+                      <Button
+                        key={index}
+                        className="w-full min-h-[48px] justify-between rounded-xl bg-primary hover:bg-[#1ab386] active:bg-[#1ab386] active:scale-[0.98] transition-all duration-200 text-white touch-target no-select shadow-sm"
+                        onClick={() => {
+                          toast.success(`${toolAction.label}...`);
+                          if (onNavigateToTool) {
+                            onNavigateToTool(toolAction.action);
                           }
-                        } catch (e) {
-                          window.location.href = tool.url;
-                        }
-                      }}
-                      style={{
-                        transform: 'translateZ(0)',
-                        WebkitTransform: 'translateZ(0)',
-                      }}
-                    >
-                      <span>{tool.name}</span>
-                      <ExternalLink className="w-4 h-4 ml-2" />
-                    </Button>
-                  ))}
+                        }}
+                        style={{
+                          transform: 'translateZ(0)',
+                          WebkitTransform: 'translateZ(0)',
+                        }}
+                      >
+                        <span>{toolAction.label}</span>
+                        <ToolIcon className="w-4 h-4 ml-2" />
+                      </Button>
+                    );
+                  })}
                 </div>
               </Card>
             </motion.div>

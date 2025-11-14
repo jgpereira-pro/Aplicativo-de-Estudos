@@ -1,6 +1,6 @@
 import { useState } from "react";
 import React from "react";
-import { Home, BookOpen, User } from "lucide-react";
+import { Home, BookOpen, User, Grid3x3 } from "lucide-react";
 import { HomeScreen } from "./components/HomeScreen";
 import { QuestionnaireScreen } from "./components/QuestionnaireScreen";
 import { ResultScreen } from "./components/ResultScreen";
@@ -9,16 +9,22 @@ import { TechniqueDetailScreen } from "./components/TechniqueDetailScreen";
 import { LoginScreen } from "./components/LoginScreen";
 import { StudyLevelScreen } from "./components/StudyLevelScreen";
 import { ProfileScreen } from "./components/ProfileScreen";
+import { FocusSessionScreen } from "./components/FocusSessionScreen";
+import { StudyPlannerScreen } from "./components/StudyPlannerScreen";
+import { DecksListScreen } from "./components/DecksListScreen";
+import { DeckReviewScreen } from "./components/DeckReviewScreen";
+import { ConceptBoardScreen } from "./components/ConceptBoardScreen";
 import { MobileFrame } from "./components/shared/MobileFrame";
 import { motion, AnimatePresence } from "motion/react";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { Toaster } from "./components/ui/sonner";
 
-type Screen = "home" | "questionnaire" | "result" | "library" | "technique-detail" | "login" | "study-level" | "profile";
+type Screen = "home" | "questionnaire" | "result" | "library" | "technique-detail" | "login" | "study-level" | "profile" | "focus" | "planner" | "decks" | "deck-review" | "concept-board";
 
 const navItems = [
   { id: "home", label: "Home", icon: Home },
   { id: "biblioteca", label: "Biblioteca", icon: BookOpen },
+  { id: "tools", label: "Ferramentas", icon: Grid3x3 },
   { id: "perfil", label: "Perfil", icon: User }
 ];
 
@@ -30,6 +36,7 @@ function AppContent() {
   const [selectedTechniqueId, setSelectedTechniqueId] = useState<string | null>(null);
   const [selectedTechnique, setSelectedTechnique] = useState<any>(null);
   const [previousScreen, setPreviousScreen] = useState<Screen>("home");
+  const [selectedDeckId, setSelectedDeckId] = useState<string | null>(null);
 
   // Handle logout - redirect to home when user logs out
   React.useEffect(() => {
@@ -76,6 +83,12 @@ function AppContent() {
     
     if (tabId === "home") {
       setCurrentScreen("home");
+    } else if (tabId === "decks") {
+      setCurrentScreen("decks");
+    } else if (tabId === "planner") {
+      setCurrentScreen("planner");
+    } else if (tabId === "foco") {
+      setCurrentScreen("focus");
     } else if (tabId === "biblioteca") {
       setCurrentScreen("library");
     } else if (tabId === "perfil") {
@@ -87,6 +100,17 @@ function AppContent() {
         setCurrentScreen("login");
       }
     }
+  };
+
+  const handleSelectDeck = (deckId: string) => {
+    setSelectedDeckId(deckId);
+    setCurrentScreen("deck-review");
+  };
+
+  const handleBackFromDeckReview = () => {
+    setCurrentScreen("decks");
+    setActiveTab("decks");
+    setSelectedDeckId(null);
   };
 
   const handleTechniqueSelect = (techniqueId: string) => {
@@ -157,6 +181,7 @@ function AppContent() {
               onStartDiagnostic={handleStartDiagnostic}
               activeTab={activeTab}
               onTabChange={handleTabChange}
+              onNavigateToConceptBoard={() => setCurrentScreen("concept-board")}
             />
           </motion.div>
         )}
@@ -230,6 +255,19 @@ function AppContent() {
               techniqueId={selectedTechniqueId}
               technique={selectedTechnique}
               onBack={handleBackFromTechniqueDetail}
+              onNavigateToTool={(tool) => {
+                // Navigate to internal tools based on tool name
+                if (tool === 'foco') {
+                  setCurrentScreen('focus');
+                  setActiveTab('foco');
+                } else if (tool === 'planner') {
+                  setCurrentScreen('planner');
+                  setActiveTab('planner');
+                } else if (tool === 'decks') {
+                  setCurrentScreen('decks');
+                  setActiveTab('decks');
+                }
+              }}
             />
           </motion.div>
         )}
@@ -273,6 +311,91 @@ function AppContent() {
               onNavigate={handleNavigate}
               activeTab={activeTab}
               onTabChange={handleTabChange}
+            />
+          </motion.div>
+        )}
+
+        {currentScreen === "focus" && (
+          <motion.div
+            key="focus"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="h-full"
+          >
+            <FocusSessionScreen 
+              activeTab={activeTab}
+              onTabChange={handleTabChange}
+              navItems={navItems}
+            />
+          </motion.div>
+        )}
+
+        {currentScreen === "planner" && (
+          <motion.div
+            key="planner"
+            initial={{ opacity: 0, x: -100 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 100 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="h-full"
+          >
+            <StudyPlannerScreen 
+              activeTab={activeTab}
+              onTabChange={handleTabChange}
+              navItems={navItems}
+            />
+          </motion.div>
+        )}
+
+        {currentScreen === "decks" && (
+          <motion.div
+            key="decks"
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -100 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="h-full"
+          >
+            <DecksListScreen 
+              activeTab={activeTab}
+              onTabChange={handleTabChange}
+              navItems={navItems}
+              onSelectDeck={handleSelectDeck}
+            />
+          </motion.div>
+        )}
+
+        {currentScreen === "deck-review" && selectedDeckId && (
+          <motion.div
+            key="deck-review"
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 100 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="h-full"
+          >
+            <DeckReviewScreen 
+              deckId={selectedDeckId}
+              onBack={handleBackFromDeckReview}
+            />
+          </motion.div>
+        )}
+
+        {currentScreen === "concept-board" && (
+          <motion.div
+            key="concept-board"
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 100 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="h-full"
+          >
+            <ConceptBoardScreen 
+              activeTab={activeTab}
+              onTabChange={handleTabChange}
+              navItems={navItems}
             />
           </motion.div>
         )}

@@ -1,23 +1,27 @@
 import { Button } from "./ui/button";
-import { Home, BookOpen, User } from "lucide-react";
+import { Card } from "./ui/card";
+import { Home, BookOpen, User, Grid3x3, ArrowRight, Network } from "lucide-react";
 import { BottomNavigation } from "./shared/BottomNavigation";
 
 interface HomeScreenProps {
   onStartDiagnostic: () => void;
   activeTab: string;
   onTabChange: (tab: string) => void;
+  onNavigateToConceptBoard?: () => void;
 }
 
 const navItems = [
   { id: "home", label: "Home", icon: Home },
   { id: "biblioteca", label: "Biblioteca", icon: BookOpen },
+  { id: "tools", label: "Ferramentas", icon: Grid3x3 },
   { id: "perfil", label: "Perfil", icon: User }
 ];
 
-export function HomeScreen({ onStartDiagnostic, activeTab, onTabChange }: HomeScreenProps) {
+export function HomeScreen({ onStartDiagnostic, activeTab, onTabChange, onNavigateToConceptBoard }: HomeScreenProps) {
   return (
     <div className="flex flex-col h-full bg-gradient-to-b from-accent/30 to-white">
-      <div className="flex-1 flex flex-col items-center justify-center px-6 py-12">
+      <div className="flex-1 overflow-y-auto smooth-scroll">
+        <div className="flex flex-col items-center justify-center px-6 py-12 min-h-full">
         {/* Abstract Illustration */}
         <div className="mb-12 relative w-64 h-64">
           <svg viewBox="0 0 200 200" className="w-full h-full">
@@ -56,18 +60,21 @@ export function HomeScreen({ onStartDiagnostic, activeTab, onTabChange }: HomeSc
           Descubra técnicas personalizadas para melhorar sua concentração e produtividade nos estudos.
         </p>
         
-        <Button 
-          onClick={onStartDiagnostic}
-          size="lg"
-          className="w-full max-w-xs min-h-[56px] rounded-xl transition-all duration-200 active:scale-[0.97] shadow-sm bg-primary active:bg-[#1ab386] touch-target no-select"
-          style={{
-            /* Android: GPU acceleration para animações suaves */
-            transform: 'translateZ(0)',
-            WebkitTransform: 'translateZ(0)',
-          }}
-        >
-          Iniciar Diagnóstico Rápido
-        </Button>
+        <div className="w-full max-w-sm space-y-4">
+          <Button 
+            onClick={onStartDiagnostic}
+            size="lg"
+            className="w-full min-h-[56px] rounded-xl transition-all duration-200 active:scale-[0.97] shadow-sm bg-primary active:bg-[#1ab386] touch-target no-select"
+            style={{
+              /* Android: GPU acceleration para animações suaves */
+              transform: 'translateZ(0)',
+              WebkitTransform: 'translateZ(0)',
+            }}
+          >
+            Iniciar Diagnóstico Rápido
+          </Button>
+        </div>
+        </div>
       </div>
 
       <BottomNavigation 

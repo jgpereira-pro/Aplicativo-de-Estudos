@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { GraduationCap, BookOpen, Lightbulb } from 'lucide-react';
 import { Button } from './ui/button';
 import { useAuth, StudyLevel } from '../contexts/AuthContext';
-import { toast } from 'sonner';
+import { toast } from 'sonner@2.0.3';
 
 const studyLevels = [
   {
