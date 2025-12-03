@@ -11,6 +11,7 @@ interface CreateDeckDrawerProps {
   onCreateDeck: (name: string, description?: string, category?: string) => boolean;
 }
 
+
 /**
  * Drawer para criar novo deck
  * 
